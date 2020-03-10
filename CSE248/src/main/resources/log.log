@@ -1,0 +1,49 @@
+08-03-2020 15:59:44 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 16:00:58 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 16:03:00 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 16:11:16 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 16:20:12 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 16:34:25 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 16:34:25 INFO  UserDetailsServiceImpl:41 - Found user: 
+08-03-2020 16:53:46 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 16:53:46 INFO  UserDetailsServiceImpl:41 - Found user: 
+08-03-2020 16:58:27 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 17:05:01 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:05:01 INFO  UserDetailsServiceImpl:41 - Found user: 
+08-03-2020 17:06:14 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:06:14 INFO  UserDetailsServiceImpl:41 - Found user: 
+08-03-2020 17:06:26 INFO  UserDetailsServiceImpl:41 - Found user: a
+08-03-2020 17:06:30 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:06:30 INFO  UserDetailsServiceImpl:41 - Found user: 
+08-03-2020 17:08:35 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:10:57 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:11:00 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 17:11:17 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 17:11:19 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:11:20 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:20:43 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:24:23 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:24:28 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 17:24:48 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:29:30 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:29:38 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 17:33:51 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:36:33 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:42:51 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:45:38 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:47:23 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:47:33 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 17:48:46 INFO  UserDetailsServiceImpl:34 - User with this email not found: 
+08-03-2020 19:11:25 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 19:20:55 INFO  UserDetailsServiceImpl:44 - Found user: a
+08-03-2020 19:38:23 INFO  UserDetailsServiceImpl:34 - User with this email not found: a
+08-03-2020 19:39:30 INFO  UserDetailsServiceImpl:34 - User with this email not found: a
+08-03-2020 20:30:54 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:10:02 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:13:09 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:15:21 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:33:26 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:38:48 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:54:09 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:58:16 INFO  UserDetailsServiceImpl:44 - Found user: alex
+08-03-2020 21:59:50 INFO  UserDetailsServiceImpl:44 - Found user: alex
