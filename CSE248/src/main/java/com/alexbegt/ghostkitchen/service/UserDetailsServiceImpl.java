@@ -1,8 +1,8 @@
-package com.alexbegt.springbootdemo.service;
+package com.alexbegt.ghostkitchen.service;
 
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
-import com.alexbegt.springbootdemo.model.User;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.model.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;

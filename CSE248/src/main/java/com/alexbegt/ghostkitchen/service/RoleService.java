@@ -1,6 +1,6 @@
-package com.alexbegt.springbootdemo.service;
+package com.alexbegt.ghostkitchen.service;
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
 
 import java.util.List;
 

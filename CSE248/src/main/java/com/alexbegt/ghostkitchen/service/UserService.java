@@ -1,6 +1,6 @@
-package com.alexbegt.springbootdemo.service;
+package com.alexbegt.ghostkitchen.service;
 
-import com.alexbegt.springbootdemo.model.User;
+import com.alexbegt.ghostkitchen.model.User;
 
 import java.util.List;
 

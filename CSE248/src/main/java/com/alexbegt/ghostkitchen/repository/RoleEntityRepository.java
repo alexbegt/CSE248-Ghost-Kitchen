@@ -1,6 +1,6 @@
-package com.alexbegt.springbootdemo.repository;
+package com.alexbegt.ghostkitchen.repository;
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

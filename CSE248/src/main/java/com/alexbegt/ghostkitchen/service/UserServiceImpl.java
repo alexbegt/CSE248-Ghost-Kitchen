@@ -1,8 +1,8 @@
-package com.alexbegt.springbootdemo.service;
+package com.alexbegt.ghostkitchen.service;
 
-import com.alexbegt.springbootdemo.model.User;
-import com.alexbegt.springbootdemo.repository.UserEntityRepository;
-import com.alexbegt.springbootdemo.transformer.UserMapper;
+import com.alexbegt.ghostkitchen.model.User;
+import com.alexbegt.ghostkitchen.repository.UserEntityRepository;
+import com.alexbegt.ghostkitchen.transformer.UserMapper;
 import lombok.AllArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;

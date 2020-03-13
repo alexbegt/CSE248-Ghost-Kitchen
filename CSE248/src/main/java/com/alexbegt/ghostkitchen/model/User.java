@@ -1,7 +1,7 @@
-package com.alexbegt.springbootdemo.model;
+package com.alexbegt.ghostkitchen.model;
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
-import com.alexbegt.springbootdemo.entity.UserEntity;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

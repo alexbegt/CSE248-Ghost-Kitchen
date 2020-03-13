@@ -1,4 +1,4 @@
-package com.alexbegt.springbootdemo.entity;
+package com.alexbegt.ghostkitchen.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

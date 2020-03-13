@@ -1,4 +1,4 @@
-package com.alexbegt.springbootdemo;
+package com.alexbegt.ghostkitchen;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

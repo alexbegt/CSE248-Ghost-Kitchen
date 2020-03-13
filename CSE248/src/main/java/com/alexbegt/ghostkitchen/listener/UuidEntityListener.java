@@ -1,6 +1,6 @@
-package com.alexbegt.springbootdemo.listener;
+package com.alexbegt.ghostkitchen.listener;
 
-import com.alexbegt.springbootdemo.entity.UuidEntity;
+import com.alexbegt.ghostkitchen.entity.UuidEntity;
 
 import javax.persistence.PrePersist;
 import java.util.UUID;

@@ -1,7 +1,7 @@
-package com.alexbegt.springbootdemo.service;
+package com.alexbegt.ghostkitchen.service;
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
-import com.alexbegt.springbootdemo.repository.RoleEntityRepository;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.repository.RoleEntityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package com.alexbegt.springbootdemo.transformer;
+package com.alexbegt.ghostkitchen.transformer;
 
-import com.alexbegt.springbootdemo.entity.UserEntity;
-import com.alexbegt.springbootdemo.model.User;
+import com.alexbegt.ghostkitchen.entity.UserEntity;
+import com.alexbegt.ghostkitchen.model.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;

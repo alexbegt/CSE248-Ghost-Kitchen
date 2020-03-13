@@ -1,6 +1,6 @@
-package com.alexbegt.springbootdemo.entity;
+package com.alexbegt.ghostkitchen.entity;
 
-import com.alexbegt.springbootdemo.listener.UuidEntityListener;
+import com.alexbegt.ghostkitchen.listener.UuidEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

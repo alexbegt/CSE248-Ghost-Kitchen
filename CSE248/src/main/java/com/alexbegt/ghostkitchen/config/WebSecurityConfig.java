@@ -1,4 +1,4 @@
-package com.alexbegt.springbootdemo.config;
+package com.alexbegt.ghostkitchen.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

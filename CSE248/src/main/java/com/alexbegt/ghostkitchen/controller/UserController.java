@@ -1,9 +1,9 @@
-package com.alexbegt.springbootdemo.controller;
+package com.alexbegt.ghostkitchen.controller;
 
-import com.alexbegt.springbootdemo.entity.RoleEntity;
-import com.alexbegt.springbootdemo.model.User;
-import com.alexbegt.springbootdemo.service.RoleServiceImpl;
-import com.alexbegt.springbootdemo.service.UserServiceImpl;
+import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.model.User;
+import com.alexbegt.ghostkitchen.service.RoleServiceImpl;
+import com.alexbegt.ghostkitchen.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
