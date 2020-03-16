@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
+
   UserEntity mapUserToUserEntity(User user);
 
   User mapUserEntityToUser(UserEntity userEntity);

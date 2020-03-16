@@ -1,9 +1,10 @@
 package com.alexbegt.ghostkitchen.controller;
 
 import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.model.Role;
 import com.alexbegt.ghostkitchen.model.User;
-import com.alexbegt.ghostkitchen.service.RoleServiceImpl;
-import com.alexbegt.ghostkitchen.service.UserServiceImpl;
+import com.alexbegt.ghostkitchen.service.role.RoleServiceImpl;
+import com.alexbegt.ghostkitchen.service.user.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,14 +26,13 @@ public class UserController {
   private final RoleServiceImpl roleService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
   @GetMapping("/")
-  public String welcome(){
+  public String welcome() {
     return "welcome";
   }
 
   @GetMapping("/registration-form")
-  public ModelAndView registerForm(){
+  public ModelAndView registerForm() {
     User user = new User();
     ModelAndView modelAndView = new ModelAndView("registration_form");
     modelAndView.addObject("user", user);
@@ -41,10 +41,10 @@ public class UserController {
   }
 
   @PostMapping("/registration")
-  public RedirectView userRegistration(@ModelAttribute("user") User user){
+  public RedirectView userRegistration(@ModelAttribute("user") User user) {
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-    Set<RoleEntity> roles = new HashSet<>();
-    roles.add(roleService.getRoleById(2L));
+    Set<Role> roles = new HashSet<>();
+    roles.add(roleService.getRoleByName("EMAIL_CONFIRMATION"));
     user.setRoles(roles);
     userService.createUser(user);
 
@@ -52,17 +52,17 @@ public class UserController {
   }
 
   @GetMapping("/home")
-  public String home(){
+  public String home() {
     return "home";
   }
 
   @PostMapping("/home")
-  public String postHome(){
+  public String postHome() {
     return "home";
   }
 
   @GetMapping("/logout")
-  public String logout(){
+  public String logout() {
     return "logout";
   }
 }

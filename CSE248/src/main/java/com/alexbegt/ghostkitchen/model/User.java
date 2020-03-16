@@ -29,7 +29,7 @@ public class User {
   private String city;
   private String state;
   private String zipCode;
-  private Set<RoleEntity> roles;
+  private Set<Role> roles;
 
   @Override
   public int hashCode() {
@@ -42,7 +42,6 @@ public class User {
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof UserEntity) {
-
       UserEntity userEntity = (UserEntity) obj;
 
       return this.username.equals(userEntity.getUsername()) &&

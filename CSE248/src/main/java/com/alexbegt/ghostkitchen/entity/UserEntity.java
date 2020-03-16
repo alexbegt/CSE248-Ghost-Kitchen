@@ -51,6 +51,9 @@ public class UserEntity extends UuidEntity {
   @Column(name = "zip_code")
   private String zipCode;
 
+  @Column(name = "enabled")
+  private boolean enabled;
+
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "users_roles",

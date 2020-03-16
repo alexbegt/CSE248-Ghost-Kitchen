@@ -1,10 +1,10 @@
-package com.alexbegt.ghostkitchen.service;
-
+package com.alexbegt.ghostkitchen.service.user;
 
 import com.alexbegt.ghostkitchen.entity.RoleEntity;
+import com.alexbegt.ghostkitchen.model.Role;
 import com.alexbegt.ghostkitchen.model.User;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j
+@Log4j2
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -25,13 +25,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    User user = userService.getUserByEmail(email);
+    User user = userService.getUserByUsernameOrEmail(email);
     List<String> roleNames = new ArrayList<>();
     List<GrantedAuthority> authorityList = new ArrayList<>();
 
     try {
       if (user == null) {
-        log.info("User with this email not found: " + email);
+        log.info("User with this email or username not found: " + email);
         throw new UsernameNotFoundException("User " + email + " was not found in the database");
       }
     } catch (UsernameNotFoundException e) {
@@ -43,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     } else {
       log.info("Found user: " + email);
 
-      for (RoleEntity roleEntity : user.getRoles()) {
+      for (Role roleEntity : user.getRoles()) {
         roleNames.add(roleEntity.getName());
       }
 

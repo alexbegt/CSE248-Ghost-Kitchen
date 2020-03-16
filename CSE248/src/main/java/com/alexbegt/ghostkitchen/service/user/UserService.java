@@ -1,4 +1,4 @@
-package com.alexbegt.ghostkitchen.service;
+package com.alexbegt.ghostkitchen.service.user;
 
 import com.alexbegt.ghostkitchen.model.User;
 
@@ -15,6 +15,8 @@ public interface UserService {
   User getUserByEmail(String email);
 
   User getUserByUsername(String username);
+
+  User getUserByUsernameOrEmail(String usernameOrEmail);
 
   List<User> getAllUsers();
 }

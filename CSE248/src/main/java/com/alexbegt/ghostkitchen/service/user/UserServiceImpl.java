@@ -1,4 +1,4 @@
-package com.alexbegt.ghostkitchen.service;
+package com.alexbegt.ghostkitchen.service.user;
 
 import com.alexbegt.ghostkitchen.model.User;
 import com.alexbegt.ghostkitchen.repository.UserEntityRepository;
@@ -45,5 +45,16 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getUserByUsername(String username) {
     return mapper.mapUserEntityToUser(repository.findByUsername(username).orElse(null));
+  }
+
+  @Override
+  public User getUserByUsernameOrEmail(String usernameOrEmail) {
+    User user = mapper.mapUserEntityToUser(repository.findByUsername(usernameOrEmail).orElse(null));
+
+    if (user == null) {
+      user = mapper.mapUserEntityToUser(repository.findByEmail(usernameOrEmail).orElse(null));
+    }
+
+    return user;
   }
 }

@@ -24,6 +24,12 @@ public class RoleEntity extends UuidEntity {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "description")
+  private String description;
+
+  @Column(name = "assignable")
+  private boolean isAssignable;
+
   @ManyToMany(mappedBy = "roles")
   private Set<UserEntity> users;
 }
