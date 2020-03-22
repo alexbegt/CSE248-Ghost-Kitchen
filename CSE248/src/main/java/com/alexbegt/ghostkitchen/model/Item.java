@@ -22,6 +22,7 @@ public class Item {
   private UUID uuid;
   private String name;
   private BigDecimal price;
+  private Set<Restaurant> restaurants;
 
   @Override
   public int hashCode() {

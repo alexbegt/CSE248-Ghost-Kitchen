@@ -27,4 +27,7 @@ public class ItemEntity extends UuidEntity {
 
   @Column(name = "price")
   private BigDecimal price;
+
+  @ManyToMany(mappedBy = "items")
+  private Set<RestaurantEntity> restaurants;
 }
