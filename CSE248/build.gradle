@@ -44,6 +44,8 @@ dependencies {
 
     implementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
 
+    implementation 'com.maxmind.geoip2:geoip2:2.13.1'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
