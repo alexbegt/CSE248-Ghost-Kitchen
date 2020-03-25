@@ -70,10 +70,20 @@ public class Role {
     this.name = name;
   }
 
+  /**
+   * Get the collection of users assigned to the selected role.
+   *
+   * @return the collection of users the role is assigned to
+   */
   public Collection<User> getUsers() {
     return this.users;
   }
 
+  /**
+   * Sets the collection of users the selected role is assigned to.
+   *
+   * @param users   the new collection of users to use
+   */
   public void setUsers(final Collection<User> users) {
     this.users = users;
   }
@@ -100,7 +110,9 @@ public class Role {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+
     result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+
     return result;
   }
 

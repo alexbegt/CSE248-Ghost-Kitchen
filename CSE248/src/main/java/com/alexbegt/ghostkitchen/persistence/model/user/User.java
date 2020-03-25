@@ -103,9 +103,9 @@ public class User {
   }
 
   /**
-   * Gets the users email name.
+   * Gets the users email.
    *
-   * @return the users first name.
+   * @return the users emaii.
    */
   public String getEmail() {
     return this.email;
@@ -129,6 +129,11 @@ public class User {
     return this.password;
   }
 
+  /**
+   * Sets the users password
+   *
+   * @param password  the new password
+   */
   public void setPassword(final String password) {
     this.password = password;
   }
