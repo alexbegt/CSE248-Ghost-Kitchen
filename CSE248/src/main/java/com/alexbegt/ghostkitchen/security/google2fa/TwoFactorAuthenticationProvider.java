@@ -9,17 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider {
 
-  private final UserRepository userRepository;
-
   @Autowired
-  public TwoFactorAuthenticationProvider(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+  private UserRepository userRepository;
+
 
   @Override
   public Authentication authenticate(Authentication auth) throws AuthenticationException {
