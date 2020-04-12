@@ -1,5 +1,6 @@
 package com.alexbegt.ghostkitchen.captcha;
 
+import com.alexbegt.ghostkitchen.util.Defaults;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -9,11 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 @Service("reCaptchaAttemptService")
 public class ReCaptchaAttemptService {
-
-  /**
-   * The max attempts allowed.
-   */
-  private final int MAX_ATTEMPT = 4;
 
   /**
    * The attempt cache.
@@ -56,9 +52,9 @@ public class ReCaptchaAttemptService {
    * Check if the recaptcha key is blocked from failing too many times.
    *
    * @param key the recaptcha key passed
-   * @return if the attempt should be blocked from failing 4 times.
+   * @return if the attempt should be blocked from failing Defaults.MAX_CAPTCHA_ATTEMPTS times.
    */
   public boolean isBlocked(final String key) {
-    return this.attemptsCache.getUnchecked(key) >= MAX_ATTEMPT;
+    return this.attemptsCache.getUnchecked(key) >= Defaults.MAX_CAPTCHA_ATTEMPTS;
   }
 }

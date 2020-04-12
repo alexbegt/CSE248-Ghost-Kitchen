@@ -1,5 +1,7 @@
 package com.alexbegt.ghostkitchen.persistence.model.user;
 
+import com.alexbegt.ghostkitchen.util.Defaults;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,8 +14,6 @@ import java.util.Date;
 
 @Entity
 public class PasswordResetToken {
-
-  private static final int EXPIRATION = 60 * 24;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -114,7 +114,7 @@ public class PasswordResetToken {
     final Calendar cal = Calendar.getInstance();
 
     cal.setTimeInMillis(new Date().getTime());
-    cal.add(Calendar.MINUTE, PasswordResetToken.EXPIRATION);
+    cal.add(Calendar.MINUTE, Defaults.TOKEN_EXPIRATION_TIME);
 
     return new Date(cal.getTime().getTime());
   }

@@ -4,6 +4,7 @@ import com.alexbegt.ghostkitchen.persistence.model.user.User;
 import com.alexbegt.ghostkitchen.security.login.LoggedInUser;
 import com.alexbegt.ghostkitchen.security.user.ActiveUserStorage;
 import com.alexbegt.ghostkitchen.service.DeviceService;
+import com.alexbegt.ghostkitchen.util.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +120,10 @@ public class GhostKitchenAuthenticationSuccessHandler implements AuthenticationS
     final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
     for (final GrantedAuthority grantedAuthority : authorities) {
-      if (grantedAuthority.getAuthority().equals("READ_PRIVILEGE")) {
+      if (grantedAuthority.getAuthority().equals(Defaults.READ_PRIVILEGE)) {
         isUser = true;
       }
-      else if (grantedAuthority.getAuthority().equals("WRITE_PRIVILEGE")) {
+      else if (grantedAuthority.getAuthority().equals(Defaults.WRITE_PRIVILEGE)) {
         isAdmin = true;
         isUser = false;
         break;
@@ -138,10 +139,10 @@ public class GhostKitchenAuthenticationSuccessHandler implements AuthenticationS
         username = authentication.getName();
       }
 
-      return "/homepage?user=" + username;
+      return "/home?user=" + username;
     }
     else if (isAdmin) {
-      return "/console";
+      return "/admin-panel";
     }
     else {
       throw new IllegalStateException();

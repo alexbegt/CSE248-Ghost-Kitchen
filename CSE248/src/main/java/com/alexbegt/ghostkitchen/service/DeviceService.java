@@ -4,6 +4,7 @@ import com.alexbegt.ghostkitchen.geoip2.CityDatabaseReader;
 import com.alexbegt.ghostkitchen.persistence.dao.device.DeviceMetadataRepository;
 import com.alexbegt.ghostkitchen.persistence.model.device.DeviceMetadata;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
+import com.alexbegt.ghostkitchen.util.Defaults;
 import com.google.common.base.Strings;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
@@ -71,7 +72,9 @@ public class DeviceService {
     DeviceMetadata existingDevice = this.findExistingDevice(user.getId(), deviceDetails, location);
 
     if (Objects.isNull(existingDevice)) {
-      this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), request.getLocale());
+      if(!user.getEmail().equalsIgnoreCase(Defaults.ADMIN_EMAIL)){
+        this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), request.getLocale());
+      }
 
       DeviceMetadata deviceMetadata = new DeviceMetadata();
       deviceMetadata.setUserId(user.getId());
