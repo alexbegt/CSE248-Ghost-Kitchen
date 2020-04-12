@@ -33,7 +33,7 @@ public class User {
   @Column(length = 60)
   private String password;
 
-  private boolean isUsingTwoFactorAuthentication;
+  public boolean isUsingTwoFactorAuthentication;
 
   private boolean enabled;
 
