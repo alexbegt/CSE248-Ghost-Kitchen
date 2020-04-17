@@ -68,6 +68,7 @@ dependencies {
     implementation 'org.webjars:jquery:3.5.0'
     implementation 'org.webjars:bootstrap:4.4.1-1'
     implementation 'org.webjars:popper.js:1.16.0'
+    implementation 'org.webjars:flag-icon-css:2.4.0'
     implementation 'org.webjars:webjars-locator:0.39'
 
     testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.3.0'
