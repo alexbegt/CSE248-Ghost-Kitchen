@@ -13,7 +13,7 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"success", "score", "action", "challenge_ts", "hostname", "error-codes"})
+@JsonPropertyOrder({ "success", "score", "action", "challenge_ts", "hostname", "error-codes" })
 public class GoogleResponse {
 
   @JsonProperty("success")
@@ -32,7 +32,7 @@ public class GoogleResponse {
   enum ErrorCode {
     MissingSecret, InvalidSecret, MissingResponse, InvalidResponse, BadRequest, TimeoutOrDuplicate;
 
-    private static Map<String, ErrorCode> errorsMap = new HashMap<String, ErrorCode>(4);
+    private static final Map<String, ErrorCode> errorsMap = new HashMap<String, ErrorCode>(4);
 
     static {
       errorsMap.put("missing-input-secret", MissingSecret);
@@ -49,6 +49,11 @@ public class GoogleResponse {
     }
   }
 
+  /**
+   * Gets if the request was successful from google
+   *
+   * @return if the request was successful
+   */
   @JsonProperty("success")
   public boolean isSuccess() {
     return success;
@@ -133,6 +138,12 @@ public class GoogleResponse {
 
   @Override
   public String toString() {
-    return "GoogleResponse{" + "success=" + success + ", challengeTs='" + challengeTs + '\'' + ", hostname='" + hostname + '\'' + ", score='" + score + '\'' + ", action='" + action + '\'' + ", errorCodes=" + Arrays.toString(errorCodes) + '}';
+    return "GoogleResponse{" + "success=" + success +
+      ", challengeTs='" + challengeTs +
+      '\'' + ", hostname='" + hostname +
+      '\'' + ", score='" + score +
+      '\'' + ", action='" + action +
+      '\'' + ", errorCodes=" + Arrays.toString(errorCodes) +
+      '}';
   }
 }

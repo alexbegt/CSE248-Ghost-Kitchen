@@ -1,6 +1,7 @@
 package com.alexbegt.ghostkitchen.captcha;
 
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaInvalidException;
+import com.alexbegt.ghostkitchen.util.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +27,35 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
   @Autowired
   protected RestOperations restTemplate;
 
-  protected static final Pattern RESPONSE_PATTERN = Pattern.compile("[A-Za-z0-9_-]+");
-
-  protected static final String RECAPTCHA_URL_TEMPLATE = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s";
-
+  /**
+   * Get the ReCaptcha site id
+   *
+   * @return the ReCaptcha Site Id
+   */
   @Override
   public String getReCaptchaSite() {
     return this.captchaSettings.getSite();
   }
 
+  /**
+   * Get the ReCaptcha secret id
+   *
+   * @return the ReCaptcha secret Id
+   */
   @Override
   public String getReCaptchaSecret() {
     return this.captchaSettings.getSecret();
   }
 
+  /**
+   * Performs a security check on the captcha check
+   *
+   * @param response the response to check
+   */
   protected void securityCheck(final String response) {
     LOGGER.debug("Attempting to validate response {}", response);
 
-    if (this.reCaptchaAttemptService.isBlocked(getClientIP())) {
+    if (this.reCaptchaAttemptService.isBlocked(this.getClientIP())) {
       throw new ReCaptchaInvalidException("Client exceeded maximum number of failed attempts");
     }
 
@@ -52,10 +64,21 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
     }
   }
 
+  /**
+   * Checks if the given response is valid or not
+   *
+   * @param response the response to check
+   * @return if the response is valid
+   */
   protected boolean responseSanityCheck(final String response) {
-    return StringUtils.hasLength(response) && RESPONSE_PATTERN.matcher(response).matches();
+    return StringUtils.hasLength(response) && Defaults.RESPONSE_PATTERN.matcher(response).matches();
   }
 
+  /**
+   * Get's the client ip
+   *
+   * @return the client ip
+   */
   protected String getClientIP() {
     final String xfHeader = this.request.getHeader("X-Forwarded-For");
 

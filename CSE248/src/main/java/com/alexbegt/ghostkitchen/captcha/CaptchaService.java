@@ -2,6 +2,7 @@ package com.alexbegt.ghostkitchen.captcha;
 
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaInvalidException;
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaUnavailableException;
+import com.alexbegt.ghostkitchen.util.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,16 @@ public class CaptchaService extends AbstractCaptchaService {
 
   private final static Logger LOGGER = LoggerFactory.getLogger(CaptchaService.class);
 
+  /**
+   * Processes the captcha response
+   *
+   * @param response the response spring
+   */
   @Override
   public void processResponse(final String response) {
     this.securityCheck(response);
 
-    final URI verifyUri = URI.create(String.format(RECAPTCHA_URL_TEMPLATE, getReCaptchaSecret(), response, this.getClientIP()));
+    final URI verifyUri = URI.create(String.format(Defaults.RECAPTCHA_URL_TEMPLATE, this.getReCaptchaSecret(), response, this.getClientIP()));
 
     try {
       final GoogleResponse googleResponse = this.restTemplate.getForObject(verifyUri, GoogleResponse.class);
