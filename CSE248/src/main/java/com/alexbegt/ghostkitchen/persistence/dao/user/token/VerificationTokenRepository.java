@@ -1,7 +1,7 @@
 package com.alexbegt.ghostkitchen.persistence.dao.user;
 
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
-import com.alexbegt.ghostkitchen.persistence.model.user.VerificationToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +34,13 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
   @Modifying
   @Query("delete from VerificationToken t where t.expirationDate <= ?1")
   void deleteAllExpiredSince(Date now);
+
+  /**
+   * Deletes all the tokens that are owned by the given user.
+   *
+   * @param user the user to delete by
+   */
+  @Modifying
+  @Query("delete from VerificationToken t where t.user = ?1")
+  void deleteAllByUser(User user);
 }

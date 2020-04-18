@@ -14,7 +14,8 @@ public class Address {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-  @JoinColumn(nullable = false, name = "user_id")
-  private User user;
+
+
+  @OneToOne(mappedBy = "cart")
+  private User address;
 }

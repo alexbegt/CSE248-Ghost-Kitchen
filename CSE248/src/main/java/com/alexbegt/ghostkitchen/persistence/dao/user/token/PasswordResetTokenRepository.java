@@ -1,6 +1,6 @@
 package com.alexbegt.ghostkitchen.persistence.dao.user;
 
-import com.alexbegt.ghostkitchen.persistence.model.user.PasswordResetToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,4 +34,13 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
   @Modifying
   @Query("delete from PasswordResetToken t where t.expirationDate <= ?1")
   void deleteAllExpiredSince(Date now);
+
+  /**
+   * Deletes all the tokens that are owned by the given user.
+   *
+   * @param user the user to delete by
+   */
+  @Modifying
+  @Query("delete from PasswordResetToken t where t.user = ?1")
+  void deleteAllByUser(User user);
 }

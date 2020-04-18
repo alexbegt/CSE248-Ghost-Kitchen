@@ -9,7 +9,7 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@ComponentScan(basePackages = {"com.alexbegt.ghostkitchen.captcha"})
+@ComponentScan(basePackages = { "com.alexbegt.ghostkitchen.captcha" })
 public class CaptchaConfig {
 
   @Bean

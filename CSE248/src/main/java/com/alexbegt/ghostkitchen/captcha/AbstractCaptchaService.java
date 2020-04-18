@@ -2,6 +2,7 @@ package com.alexbegt.ghostkitchen.captcha;
 
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaInvalidException;
 import com.alexbegt.ghostkitchen.util.Defaults;
+import com.alexbegt.ghostkitchen.util.UtilityMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
   protected void securityCheck(final String response) {
     LOGGER.debug("Attempting to validate response {}", response);
 
-    if (this.reCaptchaAttemptService.isBlocked(this.getClientIP())) {
+    if (this.reCaptchaAttemptService.isBlocked(UtilityMethods.getClientIP(this.request))) {
       throw new ReCaptchaInvalidException("Client exceeded maximum number of failed attempts");
     }
 
@@ -72,20 +73,5 @@ public abstract class AbstractCaptchaService implements ICaptchaService {
    */
   protected boolean responseSanityCheck(final String response) {
     return StringUtils.hasLength(response) && Defaults.RESPONSE_PATTERN.matcher(response).matches();
-  }
-
-  /**
-   * Get's the client ip
-   *
-   * @return the client ip
-   */
-  protected String getClientIP() {
-    final String xfHeader = this.request.getHeader("X-Forwarded-For");
-
-    if (xfHeader == null) {
-      return this.request.getRemoteAddr();
-    }
-
-    return xfHeader.split(",")[0];
   }
 }

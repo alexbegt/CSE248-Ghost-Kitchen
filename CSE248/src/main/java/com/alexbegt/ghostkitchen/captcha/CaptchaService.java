@@ -3,6 +3,7 @@ package com.alexbegt.ghostkitchen.captcha;
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaInvalidException;
 import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaUnavailableException;
 import com.alexbegt.ghostkitchen.util.Defaults;
+import com.alexbegt.ghostkitchen.util.UtilityMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CaptchaService extends AbstractCaptchaService {
   public void processResponse(final String response) {
     this.securityCheck(response);
 
-    final URI verifyUri = URI.create(String.format(Defaults.RECAPTCHA_URL_TEMPLATE, this.getReCaptchaSecret(), response, this.getClientIP()));
+    final URI verifyUri = URI.create(String.format(Defaults.RECAPTCHA_URL_TEMPLATE, this.getReCaptchaSecret(), response, UtilityMethods.getClientIP(this.request)));
 
     try {
       final GoogleResponse googleResponse = this.restTemplate.getForObject(verifyUri, GoogleResponse.class);
@@ -33,7 +34,7 @@ public class CaptchaService extends AbstractCaptchaService {
 
       if (!googleResponse.isSuccess()) {
         if (googleResponse.hasClientError()) {
-          this.reCaptchaAttemptService.reCaptchaFailed(this.getClientIP());
+          this.reCaptchaAttemptService.reCaptchaFailed(UtilityMethods.getClientIP(this.request));
         }
 
         throw new ReCaptchaInvalidException("reCaptcha was not successfully validated");
@@ -42,6 +43,6 @@ public class CaptchaService extends AbstractCaptchaService {
       throw new ReCaptchaUnavailableException("Registration unavailable at this time.  Please try again later.", rce);
     }
 
-    this.reCaptchaAttemptService.reCaptchaSucceeded(this.getClientIP());
+    this.reCaptchaAttemptService.reCaptchaSucceeded(UtilityMethods.getClientIP(this.request));
   }
 }
