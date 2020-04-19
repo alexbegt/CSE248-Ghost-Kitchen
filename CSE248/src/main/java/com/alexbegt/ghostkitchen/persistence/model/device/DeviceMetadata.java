@@ -11,12 +11,15 @@ import java.util.Objects;
 public class DeviceMetadata {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private Long userId;
+
   private String deviceDetails;
+
   private String location;
+
   private Date lastLoggedIn;
 
   /**

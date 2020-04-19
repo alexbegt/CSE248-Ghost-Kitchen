@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -43,14 +44,14 @@ public class DeviceService {
   private final CityDatabaseReader cityDatabaseReader;
   private final Parser parser;
   private final JavaMailSender mailSender;
-  private final MessageSource messages;
+  private final MessageSource messageSource;
 
-  public DeviceService(DeviceMetadataRepository deviceMetadataRepository, CityDatabaseReader cityDatabaseReader, Parser parser, JavaMailSender mailSender, MessageSource messages) {
+  public DeviceService(DeviceMetadataRepository deviceMetadataRepository, CityDatabaseReader cityDatabaseReader, Parser parser, JavaMailSender mailSender, MessageSource messageSource) {
     this.deviceMetadataRepository = deviceMetadataRepository;
     this.cityDatabaseReader = cityDatabaseReader;
     this.parser = parser;
     this.mailSender = mailSender;
-    this.messages = messages;
+    this.messageSource = messageSource;
   }
 
   /**
@@ -72,8 +73,8 @@ public class DeviceService {
     DeviceMetadata existingDevice = this.findExistingDevice(user.getId(), deviceDetails, location);
 
     if (Objects.isNull(existingDevice)) {
-      if(!user.getEmail().equalsIgnoreCase(Defaults.ADMIN_EMAIL)){
-        this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), request.getLocale());
+      if (!user.getEmail().equalsIgnoreCase(Defaults.ADMIN_EMAIL) || !user.getEmail().equalsIgnoreCase(Defaults.USER_EMAIL)) {
+        this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), LocaleContextHolder.getLocale());
       }
 
       DeviceMetadata deviceMetadata = new DeviceMetadata();
@@ -194,22 +195,14 @@ public class DeviceService {
    * @param locale the language being used
    */
   private void unknownDeviceNotification(String deviceDetails, String location, String ip, String email, Locale locale) {
-    final String subject = "New Login Notification";
+    final String subject = this.messageSource.getMessage("message.loginNotificationSubject", null, locale);
+    final String message = this.messageSource.getMessage("message.loginNotificationEmail", new Object[] { email, new Date().toString(), deviceDetails, location, ip }, locale);
+
     final SimpleMailMessage notification = new SimpleMailMessage();
 
     notification.setTo(email);
     notification.setSubject(subject);
-
-    String text = getMessage("message.login.notification.deviceDetails", locale) +
-      " " + deviceDetails +
-      "\n" +
-      getMessage("message.login.notification.location", locale) +
-      " " + location +
-      "\n" +
-      getMessage("message.login.notification.ip", locale) +
-      " " + ip;
-
-    notification.setText(text);
+    notification.setText(message);
     notification.setFrom(from);
 
     this.mailSender.send(notification);
@@ -224,10 +217,10 @@ public class DeviceService {
    */
   private String getMessage(String code, Locale locale) {
     try {
-      return this.messages.getMessage(code, null, locale);
+      return this.messageSource.getMessage(code, null, locale);
     }
     catch (NoSuchMessageException ex) {
-      return this.messages.getMessage(code, null, Locale.ENGLISH);
+      return this.messageSource.getMessage(code, null, Locale.ENGLISH);
     }
   }
 }
