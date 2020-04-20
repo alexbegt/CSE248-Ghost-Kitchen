@@ -33,21 +33,19 @@ public class DifferentLocationLoginListener implements ApplicationListener<OnDif
    */
   @Override
   public void onApplicationEvent(final OnDifferentLocationLoginEvent event) {
-    final String enableLocUri = event.getAppUrl() + "/new-location-detected?token=" + event.getToken().getToken();
+    final String enableLocUri = event.getAppUrl() + "/new-login-location-detected?token=" + event.getToken().getToken();
 
-    final String changePassUri = event.getAppUrl() + "/change-password";
+    final String changePassUri = event.getAppUrl() + "/forgot-password";
     final String recipientAddress = event.getUsername();
 
-    final String subject = "We have detected a login attempt from an unknown device";
-    final String message = this.messageSource.getMessage("message.differentLocation", new Object[] { new Date().toString(), event.getToken().getUserLocation().getCountry(), event.getIp(), enableLocUri, changePassUri }, event.getLocale());
+    final String subject = this.messageSource.getMessage("message.differentLocationSubject", null, event.getLocale());
+    final String message = this.messageSource.getMessage("message.differentLocationEmail", new Object[] { event.getUsername(), new Date().toString(), event.getToken().getUserLocation().getCountry(), event.getIp(), enableLocUri, changePassUri }, event.getLocale());
 
     final SimpleMailMessage email = new SimpleMailMessage();
     email.setTo(recipientAddress);
     email.setSubject(subject);
     email.setText(message);
     email.setFrom(this.env.getProperty("support.email"));
-
-    System.out.println(message);
 
     this.mailSender.send(email);
   }

@@ -40,19 +40,22 @@ public class GhostKitchenAuthenticationFailureHandler extends SimpleUrlAuthentic
 
     final Locale locale = this.localeResolver.resolveLocale(request);
 
-    String errorMessage = this.messageSource.getMessage("message.badCredentials", null, locale);
+    String errorMessage = this.messageSource.getMessage("message.invalidUsernameOrPassword", null, locale);
 
     if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
-      errorMessage = this.messageSource.getMessage("auth.message.disabled", null, locale);
+      errorMessage = this.messageSource.getMessage("message.accountIsDisabled", null, locale);
     }
     else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
-      errorMessage = this.messageSource.getMessage("auth.message.expired", null, locale);
+      errorMessage = this.messageSource.getMessage("message.accountIsExpired", null, locale);
     }
-    else if (exception.getMessage().equalsIgnoreCase("blocked")) {
-      errorMessage = this.messageSource.getMessage("auth.message.blocked", null, locale);
+    else if (exception.getMessage().equalsIgnoreCase("IP is blocked")) {
+      errorMessage = this.messageSource.getMessage("message.ipBlocked", null, locale);
     }
-    else if (exception.getMessage().equalsIgnoreCase("unusual location")) {
-      errorMessage = this.messageSource.getMessage("auth.message.unusual.location", null, locale);
+    else if (exception.getMessage().equalsIgnoreCase("Unusual login location")) {
+      errorMessage = this.messageSource.getMessage("message.unusualLoginLocation", null, locale);
+    }
+    else if (exception.getMessage().equalsIgnoreCase("Invalid verification code")) {
+      errorMessage = this.messageSource.getMessage("message.accountUsesTwoFactorAuth", null, locale);
     }
 
     request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);

@@ -11,7 +11,7 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
-    <title>Login</title>
+    <title th:utext="#{pageTitle.login}">Login</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
     <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
     <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
@@ -49,12 +49,33 @@
         </div>
     </div>
 
+    <div th:if="${param.expired}">
+        <div class="alert alert-danger text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.sessionExpired}">Session Expired</span>
+        </div>
+    </div>
+
+    <div th:if="${param.mailError}">
+        <div class="alert alert-danger text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.mailError}">Error</span>
+        </div>
+    </div>
+
     <div th:if="${param.message}">
         <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
             <div class="alert alert-info text-center">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
-                <span th:text="${message}">Message</span>
+                <span th:utext="${message}">Message</span>
             </div>
+        </div>
+    </div>
+
+    <div th:if="${param.loggedOut}">
+        <div class="alert alert-info text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.loggedOut}">Logged Out</span>
         </div>
     </div>
 
@@ -75,7 +96,6 @@
                             </div>
                             <label class="input_label">
                                 <input type="email" name="username" class="form-control input_user" value="" placeholder="email" th:placeholder="#{placeholder.email}" required="required" autocomplete="username">
-                                <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>
                             </label>
                         </div>
 
@@ -85,7 +105,6 @@
                             </div>
                             <label class="input_label">
                                 <input type="password" name="password" class="form-control input_pass" value="" placeholder="password" th:placeholder="#{placeholder.password}" required="required" autocomplete="current-password">
-                                <span id="passwordError" class="alert alert-danger col-sm-4" style="display:none"></span>
                             </label>
                         </div>
 
@@ -94,19 +113,19 @@
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                             <label class="input_label">
-                                <input type="number" name="code" pattern="[0-9]*" class="form-control input_two_factor" value="" placeholder="Two Step Verification Code (If On)" th:placeholder="#{placeholder.twoStepVerificationCode}">
+                                <input type="text" name="code" pattern="[0-9]*" class="form-control input_two_factor" value="" placeholder="Two Step Verification Code (If On)" th:placeholder="#{placeholder.twoStepVerificationCode}">
                             </label>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group justify-content-center mb-3">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="customControlInline" name="remember-me">
-                                <label class="custom-control-label" for="customControlInline">Remember me</label>
+                                <label class="custom-control-label" for="customControlInline" th:utext="#{message.rememberMe}">Remember me</label>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-center mt-3 login_container">
-                            <button type="submit" name="submit" class="btn login_btn">Login</button>
+                        <div class="d-flex justify-content-center mt-3 shared_container">
+                            <button type="submit" name="submit" class="btn shared_btn" th:utext="#{button.login}">Login</button>
                         </div>
                     </form>
                 </div>
@@ -118,6 +137,10 @@
 
                     <div class="d-flex justify-content-center links">
                         <a th:href="@{/forgot-password}" th:utext="#{message.forgotPassword}">Forgot your password?</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
                     </div>
                 </div>
             </div>

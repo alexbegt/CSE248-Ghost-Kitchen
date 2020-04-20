@@ -1,9 +1,10 @@
 package com.alexbegt.ghostkitchen.service;
 
 import com.alexbegt.ghostkitchen.persistence.model.device.NewLocationToken;
-import com.alexbegt.ghostkitchen.persistence.model.user.PasswordResetToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.address.Address;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
-import com.alexbegt.ghostkitchen.persistence.model.user.VerificationToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.VerificationToken;
 import com.alexbegt.ghostkitchen.web.dto.user.UserDto;
 import com.alexbegt.ghostkitchen.web.error.UserAlreadyExistException;
 
@@ -41,7 +42,9 @@ public interface IUserService {
 
   User updateUserTwoFactorAuthentication(boolean useTwoFactorAuthentication);
 
-  // TODO IMPLEMENT TESTS USING METHODS BELOW
+  void changeUserAddress(User user, String streetAddress, String city, String state, String zipCode);
+
+  void changeUserCreditCard(User user, String creditCardHolderName, String creditCardNumber, String creditCardExpirationDate, String creditCardCVV);
 
   void saveRegisteredUser(User user);
 

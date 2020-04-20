@@ -114,39 +114,7 @@ public class GhostKitchenAuthenticationSuccessHandler implements AuthenticationS
    * @return the target url to send them to when they log in. Either the console or the main home page TODO CHANGE
    */
   protected String determineTargetUrl(final Authentication authentication) {
-    boolean isUser = false;
-    boolean isAdmin = false;
-
-    final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-    for (final GrantedAuthority grantedAuthority : authorities) {
-      if (grantedAuthority.getAuthority().equals(Defaults.READ_PRIVILEGE)) {
-        isUser = true;
-      }
-      else if (grantedAuthority.getAuthority().equals(Defaults.WRITE_PRIVILEGE)) {
-        isAdmin = true;
-        isUser = false;
-        break;
-      }
-    }
-    if (isUser) {
-      String username;
-
-      if (authentication.getPrincipal() instanceof User) {
-        username = ((User) authentication.getPrincipal()).getEmail();
-      }
-      else {
-        username = authentication.getName();
-      }
-
-      return "/home?user=" + username;
-    }
-    else if (isAdmin) {
-      return "/admin-panel";
-    }
-    else {
-      throw new IllegalStateException();
-    }
+    return "/home";
   }
 
   /**
