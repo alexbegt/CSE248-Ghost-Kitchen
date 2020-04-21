@@ -13,6 +13,15 @@ import java.io.IOException;
 @Component("myLogoutSuccessHandler")
 public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
 
+  /**
+   * When the user goes to logout, handles the success
+   *
+   * @param request the request
+   * @param response the response
+   * @param authentication the authentication
+   * @throws IOException if there was a file error
+   * @throws ServletException if there was a servlet error
+   */
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     final HttpSession session = request.getSession();
@@ -21,6 +30,6 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
       session.removeAttribute("user");
     }
 
-    response.sendRedirect("/logout?loggedOut");
+    response.sendRedirect("/login?loggedOut");
   }
 }

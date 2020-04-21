@@ -5,6 +5,7 @@ import com.alexbegt.ghostkitchen.captcha.error.ReCaptchaUnavailableException;
 import com.alexbegt.ghostkitchen.web.util.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public RestResponseEntityExceptionHandler() {
     super();
   }
-
-  // API
 
   // 400
   @Override
@@ -54,7 +53,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleInvalidOldPassword(final RuntimeException ex, final WebRequest request) {
     logger.error("400 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.invalidOldPassword", null, request.getLocale()), "InvalidOldPassword");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.invalidOldPassword", null, LocaleContextHolder.getLocale()), "InvalidOldPassword");
 
     return this.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -63,7 +62,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleReCaptchaInvalid(final RuntimeException ex, final WebRequest request) {
     logger.error("400 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.invalidReCaptcha", null, request.getLocale()), "InvalidReCaptcha");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.reCaptchaInvalid", null, LocaleContextHolder.getLocale()), "ReCaptchaUnAvailable");
 
     return this.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
@@ -73,7 +72,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleUserNotFound(final RuntimeException ex, final WebRequest request) {
     logger.error("404 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.userNotFound", null, request.getLocale()), "UserNotFound");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.accountNotFound", null, LocaleContextHolder.getLocale()), "AccountNotFound");
 
     return this.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
   }
@@ -83,7 +82,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleUserAlreadyExist(final RuntimeException ex, final WebRequest request) {
     logger.error("409 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.registrationError", null, request.getLocale()), "UserAlreadyExist");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.userNameInUse", null, LocaleContextHolder.getLocale()), "UsernameInUse");
 
     return this.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
   }
@@ -93,16 +92,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleMail(final RuntimeException ex, final WebRequest request) {
     logger.error("500 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.email.config.error", null, request.getLocale()), "MailError");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.mailError", null, LocaleContextHolder.getLocale()), "MailError");
 
-    return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler({ ReCaptchaUnavailableException.class })
   public ResponseEntity<Object> handleReCaptchaUnavailable(final RuntimeException ex, final WebRequest request) {
     logger.error("500 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.unavailableReCaptcha", null, request.getLocale()), "InvalidReCaptcha");
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.reCaptchaUnAvailable", null, LocaleContextHolder.getLocale()), "ReCaptchaUnAvailable");
 
     return this.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
   }
@@ -111,8 +110,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   public ResponseEntity<Object> handleInternal(final RuntimeException ex, final WebRequest request) {
     logger.error("500 Status Code", ex);
 
-    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.error", null, request.getLocale()), "InternalError");
-    
-    return new ResponseEntity<Object>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    final GenericResponse bodyOfResponse = new GenericResponse(this.messageSource.getMessage("message.error", null, LocaleContextHolder.getLocale()), "InternalError");
+
+    return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

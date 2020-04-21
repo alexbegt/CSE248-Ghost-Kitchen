@@ -5,6 +5,7 @@ import com.alexbegt.ghostkitchen.persistence.model.role.Privilege;
 import com.alexbegt.ghostkitchen.persistence.model.role.Role;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
 import com.alexbegt.ghostkitchen.security.login.LoginAttemptService;
+import com.alexbegt.ghostkitchen.util.UtilityMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,10 +46,10 @@ public class MyUserDetailsService implements UserDetailsService {
    */
   @Override
   public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-    final String ip = this.getClientIP();
+    final String ip = UtilityMethods.getClientIP(this.request);
 
     if (this.loginAttemptService.isBlocked(ip)) {
-      throw new RuntimeException("blocked");
+      throw new RuntimeException("IP is blocked");
     }
 
     try {
@@ -110,20 +111,5 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     return authorities;
-  }
-
-  /**
-   * Get's the client ip from the header.
-   *
-   * @return the clients ip
-   */
-  private String getClientIP() {
-    final String xfHeader = this.request.getHeader("X-Forwarded-For");
-
-    if (xfHeader == null) {
-      return this.request.getRemoteAddr();
-    }
-
-    return xfHeader.split(",")[0];
   }
 }

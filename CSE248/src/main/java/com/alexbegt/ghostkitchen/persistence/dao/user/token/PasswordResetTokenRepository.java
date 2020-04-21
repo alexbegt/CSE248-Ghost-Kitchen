@@ -1,4 +1,4 @@
-package com.alexbegt.ghostkitchen.persistence.dao.user;
+package com.alexbegt.ghostkitchen.persistence.dao.user.token;
 
 import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;

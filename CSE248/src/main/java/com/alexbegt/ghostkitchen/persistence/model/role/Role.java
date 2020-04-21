@@ -15,7 +15,7 @@ import java.util.Collection;
 public class Role {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToMany(mappedBy = "roles")
@@ -137,8 +137,8 @@ public class Role {
 
   @Override
   public String toString() {
-    return "Role [name=" + this.name + "]" +
-      "[id=" + this.id +
+    return "Role [name=" + this.name +
+      ", id=" + this.id +
       "]";
   }
 }

@@ -9,8 +9,6 @@ public class PasswordDto {
   @ValidPassword
   private String newPassword;
 
-  private String token;
-
   /**
    * Get's the old password from the DTO
    *
@@ -45,24 +43,5 @@ public class PasswordDto {
    */
   public void setNewPassword(String newPassword) {
     this.newPassword = newPassword;
-  }
-
-
-  /**
-   * Get's the token from the DTO
-   *
-   * @return the token
-   */
-  public String getToken() {
-    return this.token;
-  }
-
-  /**
-   * Sets the token on the DTO
-   *
-   * @param token the token
-   */
-  public void setToken(String token) {
-    this.token = token;
   }
 }

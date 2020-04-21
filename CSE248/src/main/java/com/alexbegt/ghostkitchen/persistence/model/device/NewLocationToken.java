@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 public class NewLocationToken {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String token;

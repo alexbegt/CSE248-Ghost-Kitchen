@@ -1,5 +1,6 @@
 package com.alexbegt.ghostkitchen.validation.password;
 
+import com.alexbegt.ghostkitchen.web.dto.password.ResetPasswordDto;
 import com.alexbegt.ghostkitchen.web.dto.user.UserDto;
 
 import javax.validation.ConstraintValidator;
@@ -26,8 +27,16 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
    */
   @Override
   public boolean isValid(final Object value, final ConstraintValidatorContext context) {
-    final UserDto userDto = (UserDto) value;
+    if(value instanceof UserDto) {
+      final UserDto userDto = (UserDto) value;
 
-    return userDto.getPassword().equals(userDto.getConfirmedPassword());
+      return userDto.getPassword().equals(userDto.getConfirmedPassword());
+    } else if(value instanceof ResetPasswordDto) {
+      final ResetPasswordDto resetPasswordDto = (ResetPasswordDto) value;
+
+      return resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmedPassword());
+    } else {
+      return false;
+    }
   }
 }

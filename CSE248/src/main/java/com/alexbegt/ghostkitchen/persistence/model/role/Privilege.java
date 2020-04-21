@@ -11,7 +11,7 @@ import java.util.Collection;
 public class Privilege {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
@@ -110,8 +110,8 @@ public class Privilege {
 
   @Override
   public String toString() {
-    return "Privilege [name=" + name + "]" +
-      "[id=" + id +
+    return "Privilege [name=" + name +
+      ", id=" + id +
       "]";
   }
 }
