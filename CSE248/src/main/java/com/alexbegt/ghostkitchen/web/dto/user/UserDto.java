@@ -30,7 +30,7 @@ public class UserDto {
   @Size(min = 1)
   private String confirmedPassword;
 
-  private boolean isUsingTwoFactorAuthentication;
+  private boolean usingTwoFactorAuthentication = false;
 
   private Integer role;
 
@@ -129,8 +129,8 @@ public class UserDto {
    *
    * @return if the user wants to use two factor authentication
    */
-  public boolean isUsingTwoFactorAuthentication() {
-    return this.isUsingTwoFactorAuthentication;
+  public boolean getIfUsingTwoFactorAuthentication() {
+    return this.usingTwoFactorAuthentication;
   }
 
   /**
@@ -139,17 +139,18 @@ public class UserDto {
    * @param usingTwoFactorAuthentication a true or false value.
    */
   public void setUsingTwoFactorAuthentication(boolean usingTwoFactorAuthentication) {
-    this.isUsingTwoFactorAuthentication = usingTwoFactorAuthentication;
+    this.usingTwoFactorAuthentication = usingTwoFactorAuthentication;
   }
 
   @Override
   public String toString() {
-    return "UserDto [firstName=" + this.firstName
+    return "UserDto ["
+      + "firstName=" + this.firstName
       + ", lastName=" + this.lastName
       + ", email=" + this.email
       + ", password=" + this.password
       + ", confirmedPassword=" + this.confirmedPassword
-      + ", isUsingTwoFactorAuthentication=" + this.isUsingTwoFactorAuthentication
+      + ", usingTwoFactorAuthentication=" + this.usingTwoFactorAuthentication
       + ", role=" + role
       + "]";
   }

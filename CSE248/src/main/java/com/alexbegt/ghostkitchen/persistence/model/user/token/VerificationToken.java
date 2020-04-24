@@ -1,5 +1,6 @@
-package com.alexbegt.ghostkitchen.persistence.model.user;
+package com.alexbegt.ghostkitchen.persistence.model.user.token;
 
+import com.alexbegt.ghostkitchen.persistence.model.user.User;
 import com.alexbegt.ghostkitchen.util.Defaults;
 
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import java.util.Date;
 public class VerificationToken {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String token;

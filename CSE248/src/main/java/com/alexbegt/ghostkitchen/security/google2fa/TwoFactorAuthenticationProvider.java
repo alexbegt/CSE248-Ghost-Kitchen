@@ -16,6 +16,13 @@ public class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider {
   private UserRepository userRepository;
 
 
+  /**
+   * Handles authenticating the user
+   *
+   * @param auth the authentication
+   * @return if successful, returns the token to use
+   * @throws AuthenticationException if there's an error logging the user in
+   */
   @Override
   public Authentication authenticate(Authentication auth) throws AuthenticationException {
     final User user = this.userRepository.findByEmail(auth.getName());
@@ -56,6 +63,12 @@ public class TwoFactorAuthenticationProvider extends DaoAuthenticationProvider {
     return true;
   }
 
+  /**
+   * Checks to see if the authentication supports 2fa
+   *
+   * @param authentication the authentication class to check
+   * @return If the authentication supports two FA
+   */
   @Override
   public boolean supports(Class<?> authentication) {
     return authentication.equals(UsernamePasswordAuthenticationToken.class);

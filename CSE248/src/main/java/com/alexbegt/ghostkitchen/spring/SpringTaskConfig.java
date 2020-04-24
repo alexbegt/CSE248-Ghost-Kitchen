@@ -8,5 +8,4 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan({ "com.alexbegt.ghostkitchen.task" })
 public class SpringTaskConfig {
-
 }

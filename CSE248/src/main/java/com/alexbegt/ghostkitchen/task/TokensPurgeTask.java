@@ -1,7 +1,7 @@
 package com.alexbegt.ghostkitchen.task;
 
-import com.alexbegt.ghostkitchen.persistence.dao.user.PasswordResetTokenRepository;
-import com.alexbegt.ghostkitchen.persistence.dao.user.VerificationTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.token.PasswordResetTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.token.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,9 @@ import java.util.Date;
 @Service
 @Transactional
 public class TokensPurgeTask {
+
   @Autowired
-  VerificationTokenRepository tokenRepository;
+  VerificationTokenRepository verificationTokenRepository;
 
   @Autowired
   PasswordResetTokenRepository passwordTokenRepository;
@@ -25,6 +26,6 @@ public class TokensPurgeTask {
     Date now = Date.from(Instant.now());
 
     this.passwordTokenRepository.deleteAllExpiredSince(now);
-    this.tokenRepository.deleteAllExpiredSince(now);
+    this.verificationTokenRepository.deleteAllExpiredSince(now);
   }
 }

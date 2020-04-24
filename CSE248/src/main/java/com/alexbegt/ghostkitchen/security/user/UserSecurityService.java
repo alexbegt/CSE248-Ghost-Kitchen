@@ -1,7 +1,8 @@
 package com.alexbegt.ghostkitchen.security.user;
 
-import com.alexbegt.ghostkitchen.persistence.dao.user.PasswordResetTokenRepository;
-import com.alexbegt.ghostkitchen.persistence.model.user.PasswordResetToken;
+import com.alexbegt.ghostkitchen.persistence.dao.user.token.PasswordResetTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
+import com.alexbegt.ghostkitchen.util.Defaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,13 @@ public class UserSecurityService implements ISecurityUserService {
    * Checks the given token to see if it's valid or not.
    *
    * @param token the password token string
-   * @return if the token is valid, returns a null string, if expired returns expired, or if invalid, returns invalidToken.
+   * @return if the token is valid, returns a null string, if expired returns expiredResetToken, or if invalid, returns invalidResetToken.
    */
   @Override
   public String validatePasswordResetToken(String token) {
     final PasswordResetToken passToken = this.passwordTokenRepository.findByToken(token);
 
-    return !this.isTokenFound(passToken) ? "invalidToken" : this.isTokenExpired(passToken) ? "expired" : null;
+    return !this.isTokenFound(passToken) ? Defaults.PASSWORD_RESET_TOKEN_INVALID : this.isTokenExpired(passToken) ? Defaults.PASSWORD_RESET_TOKEN_EXPIRED : null;
   }
 
   /**
