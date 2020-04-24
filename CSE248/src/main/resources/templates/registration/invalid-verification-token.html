@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" id="bootstrap-css"/>
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/registration/sign-up.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+<script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+    <title th:utext="#{pageTitle.invalidVerificationToken}">Invalid Verification Token</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/registration/sign-up.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+</head>
+
+<body>
+    <div th:if="${param.mailError}">
+        <div class="alert alert-danger text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.mailError}">Error</span>
+        </div>
+    </div>
+
+    <div th:if="${param.error}">
+        <div th:if="${param.error[0]}" th:with="error=${param.error[0]}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${error}">Error</span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="!${param.token}">
+        <div class="alert alert-danger text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.missingVerificationToken}">A verification reset token is required on this page</span>
+        </div>
+    </div>
+
+    <div th:if="${param.message}">
+        <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${message}">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card forgot_password_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img th:src="@{/resources/images/shopping_cart.png}" class="brand_logo" alt="Logo">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center form_container">
+                    <div class="d-flex justify-content-center mt-3 register_container">
+                        <label class="input_label" th:if="${param.expired[0]}">
+                            <button onclick="resendToken()" th:utext="#{button.resendVerificationTokenEmail}">Resend Verification Token</button>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        <a th:utext="#{message.noAccount}">Don't have an account? </a> <a th:href="@{/sign-up}" class="ml-2" th:utext="#{message.signUp}">Sign Up</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a th:href="@{/login}" th:utext="#{message.login}">Login</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        function resendToken() {
+            const token = [[${param.token}]];
+
+            $.get("/resend-registration-token?token=" + token, function (data) {
+                window.location.href = serverContext + "login?message=" + data.message;
+            }).fail(function (data) {
+                if (data.responseJSON.error.indexOf("MailError") > -1) {
+                    window.location.href = "/invalid-user?mailError"
+                } else {
+                    window.location.href = "/invalid-user?error=" + data.responseJSON.message;
+                }
+            })
+        }
+
+        $(document).ajaxStart(function () {
+            $("title").html(/*[[#{pageTitle.loading}]]*/);
+        });
+    </script>
+</body>
+</html>

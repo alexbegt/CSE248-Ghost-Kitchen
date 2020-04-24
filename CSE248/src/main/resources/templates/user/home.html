@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" id="bootstrap-css"/>
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/user/home.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+<script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+<script th:src="@{/resources/js/pwstrength.js}"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+    <title th:utext="#{pageTitle.accountHome}">User Home</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/user/home.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+    <script th:src="@{/resources/js/pwstrength.js}"></script>
+</head>
+<body>
+    <div th:if="${param.error}">
+        <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION']}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${errorMsg}">Error</span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${param.message}">
+        <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
+            <div class="alert alert-info text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${message}">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card user_home_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img th:src="@{/resources/images/user_icon.png}" class="brand_logo" alt="Logo">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center user_home_container mt-5">
+                    <div class="mt-5">
+                        <div class="d-flex justify-content-center links mb-4">
+                            <a th:utext="#{message.helloUser} + ' ' + ${currentUser}"></a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links">
+                            <div th:if="${#authentication.principal.isUsingTwoFactorAuthentication()}" class="d-flex justify-content-center links">
+                                <a href="#" class="btn btn-primary" onclick="disableTwoFactorAuthentication()" th:utext="#{button.disableTwoFactorAuthentication}">Disable Two Factor Authentication</a>
+                            </div>
+                            <div th:if="${!#authentication.principal.isUsingTwoFactorAuthentication()}" class="d-flex justify-content-center links">
+                                <a th:utext="#{message.twoFactorAuthenticationNotEnabled}" class="text-center"></a>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.viewRestaurants}" th:href="@{/view-restaurants}">Restaurants</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.viewOrders}" th:href="@{/view-orders}">Orders</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.changeAddress}" th:href="@{/change-address}">Change Address</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.changeCreditCard}" th:href="@{/change-credit-card}">Change Credit Card</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.changePassword}" th:href="@{/change-password}">Change Password</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.logout}" th:href="@{/logout}">Logout</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div th:each="restaurant : ${restaurants}">
+                    <div class="d-flex justify-content-center mt-3 user_home_container" id="errors">
+                        <a class="btn shared_btn" th:utext="${restaurant.name}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.streetAddress}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.city}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.state}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.zipCode}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.phoneNumber}" th:href="@{/change-password}">Change Password</a>
+                        <a class="btn shared_btn" th:utext="${restaurant.items}" th:href="@{/change-password}">Change Password</a>
+                    </div>
+                </div>-->
+
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" rel="keep-params" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" rel="keep-params" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function disableTwoFactorAuthentication() {
+            setTwoFactorAuthentication();
+        }
+
+        function setTwoFactorAuthentication() {
+            $.post("/api/disable-two-factor-authentication", null, function (data) {
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

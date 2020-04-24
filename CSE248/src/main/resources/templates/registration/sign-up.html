@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" id="bootstrap-css"/>
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/registration/sign-up.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+<script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+<script th:src="@{/resources/js/pwstrength.js}"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+    <title th:utext="#{pageTitle.register}">Register</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/registration/sign-up.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+    <script th:src="@{/resources/js/pwstrength.js}"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+
+<body>
+    <div th:if="${param.error}">
+        <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION']}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${errorMsg}">Error</span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${param.mailError}">
+        <div class="alert alert-danger text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+            <span th:utext="#{message.mailError}">Error</span>
+        </div>
+    </div>
+
+    <div th:if="${param.message}">
+        <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
+            <div class="alert alert-info text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${message}">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card register_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img th:src="@{/resources/images/shopping_cart.png}" class="brand_logo" alt="Logo">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center form_container">
+                    <form action="/static" method="POST" enctype="utf8">
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="firstNameErrors">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="firstName" class="form-control input_user" value="" placeholder="first name" th:placeholder="#{placeholder.firstName}" required="required" autocomplete="given-name">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="lastNameErrors">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="lastName" class="form-control input_user" value="" placeholder="last name" th:placeholder="#{placeholder.lastName}" required="required" autocomplete="family-name">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="emailErrors">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="email" id="email" name="email" class="form-control input_user" value="" placeholder="email" th:placeholder="#{placeholder.email}" required="required" autocomplete="email">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="passwordErrors">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="password" id="password" name="password" class="form-control input_pass" value="" placeholder="password" th:placeholder="#{placeholder.password}" required="required" autocomplete="new-password">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="confirmedPasswordErrors">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="password" id="confirmedPassword" name="confirmedPassword" class="form-control input_pass" value="" placeholder="password" th:placeholder="#{placeholder.confirmPassword}" required="required" autocomplete="new-password">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="usingTwoFactorAuthentication" name="usingTwoFactorAuthentication" value="true">
+                                <label class="custom-control-label" for="usingTwoFactorAuthentication" th:utext="#{message.useTwoFactorAuthentication}">Use Two Factor Authentication</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-2" id="captchaErrors">
+                            <div class="g-recaptcha col-sm-5" th:attr="data-sitekey=${@captchaService.getReCaptchaSite()}" data-callback="onReCaptchaSuccess" data-expired-callback="onReCaptchaExpired" data-theme="dark"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3 shared_container" id="globalErrors">
+                            <button type="submit" name="submit" class="btn shared_btn" th:utext="#{button.signUp}">Register</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        <a th:href="@{/login}" th:utext="#{message.login}">Login</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                $("#firstNameErrors").popover('hide');
+                $("#lastNameErrors").popover('hide');
+                $("#emailErrors").popover('hide');
+                $("#passwordErrors").popover('hide');
+                $("#confirmedPasswordErrors").popover('hide');
+                $("#captchaErrors").popover('hide');
+                $("#globalErrors").popover('hide');
+
+                register(event);
+            });
+
+            $("#confirmedPasswordErrors").popover({content: /*[[#{message.passwordDoesntMatch}]]*/, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('hide');
+
+            $(":password").keyup(function () {
+                if ($("#password").val() !== $("#confirmedPassword").val()) {
+                    $("#confirmedPasswordErrors").popover('show');
+                } else {
+                    $("#confirmedPasswordErrors").popover('hide');
+                }
+            });
+
+            const options = {
+                common: {
+                    minChar: 8,
+                    debug: true,
+                    usernameField: "#username"
+                },
+                ui: {
+                    container: "#form",
+                    viewports: {
+                        progress: ".UNUSED"
+                    },
+                    popoverPlacement: 'right',
+                    showPopover: true,
+                    showErrors: true
+                }
+            };
+            $('#password').pwstrength(options);
+        });
+
+        function register(event) {
+            event.preventDefault();
+
+            if ($("#password").val() !== $("#confirmedPassword").val()) {
+                $("#confirmedPasswordErrors").popover('show');
+                return;
+            }
+
+            if (typeof grecaptcha !== 'undefined') {
+                const resp = grecaptcha.getResponse();
+                if (resp.length === 0) {
+                    $("#captchaErrors").popover({content: /*[[#{message.verifyNotARobot}]]*/, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                    return;
+                }
+            }
+
+            const formData = $('form').serialize();
+
+            console.log(formData)
+
+            $.post("/api/register-user", formData, function (data) {
+                if (data.message === "success") {
+                    window.location.href = "/login?message=" + /*[[#{message.registrationSuccessful}]]*/;
+                }
+            }).fail(function (data) {
+                grecaptcha.reset();
+
+                if (data.responseJSON.error.indexOf("MailError") > -1) {
+                    window.location.href = "/sign-up?mailError";
+                } else if (data.responseJSON.error === "ReCaptchaUnAvailable") {
+                    $("#captchaErrors").popover({content: data.responseJSON.message, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                } else if (data.responseJSON.error === "UsernameInUse") {
+                    $("#emailErrors").popover({content: data.responseJSON.message, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                } else if (data.responseJSON.error.indexOf("InternalError") > -1) {
+                    window.location.href = "/sign-up?message=" + data.responseJSON.message;
+                } else {
+                    let errors = $.parseJSON(data.responseJSON.message);
+                    $.each(errors, function (index, item) {
+                        $("#" + item.field + "Errors").popover({content: item.defaultMessage, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                    });
+
+                    errors = $.parseJSON(data.responseJSON.error);
+                    $.each(errors, function (index, item) {
+                        $("#globalErrors").popover({content: item.defaultMessage, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                    });
+                }
+            });
+        }
+
+        function onReCaptchaSuccess() {
+            $("#captchaErrors").popover('hide');
+        };
+
+        function onReCaptchaExpired() {
+            $("#captchaErrors").popover({content: /*[[#{message.reCaptchaExpired}]]*/, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+            grecaptcha.reset();
+        }
+
+        window.onReCaptchaSuccess = onReCaptchaSuccess;
+        window.onReCaptchaExpired = onReCaptchaExpired;
+    </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" id="bootstrap-css"/>
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/user/change-credit-card.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+<script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+    <title th:utext="#{pageTitle.changeCreditCard}">Change Credit Card</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/user/credit-card.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+</head>
+<body>
+    <div th:if="${param.error}">
+        <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION']}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${errorMsg}">Error</span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${param.message}">
+        <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
+            <div class="alert alert-info text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${message}">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card change_password_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img th:src="@{/resources/images/user_icon.png}" class="brand_logo" alt="Logo">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center form_container">
+                    <form action="#" method="POST" enctype="utf8">
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="cardHolderName" class="form-control input_generic" value="" placeholder="card holder name" th:placeholder="#{placeholder.creditCardHolderName}" required="required">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="creditCardNumber" class="form-control input_generic" value="" placeholder="credit card number" th:placeholder="#{placeholder.creditCardNumber}" required="required">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="expirationDate" class="form-control input_generic" value="" placeholder="expiration date" th:placeholder="#{placeholder.creditCardExpirationDate}" required="required">
+                            </label>
+                        </div>
+
+                        <div class="input-group justify-content-center mb-2">
+                            <div class="input-group-append" id="globalMessages">
+                                <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                            </div>
+                            <label class="input_label">
+                                <input type="text" name="cvv" pattern="[0-9]*" class="form-control input_generic" value="" placeholder="cvv" th:placeholder="#{placeholder.creditCardCvv}" required="required">
+                            </label>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3 shared_container" id="globalErrors">
+                            <button type="submit" name="submit" class="btn shared_btn" th:utext="#{button.saveCreditCard}">Save Credit Card</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        <a th:href="@{/home}" th:utext="#{message.returnHome}">Return Home</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                $("#globalMessages").popover('hide');
+                $("#globalErrors").popover('hide');
+
+                updatePassword(event);
+            });
+        });
+
+        function updatePassword(event) {
+            event.preventDefault();
+
+            const formData = $('form').serialize();
+
+            $.post("/api/change-credit-card", formData, function (data) {
+                window.location.href = "/home?message=" + data.message;
+            }).fail(function (data) {
+                if (data.responseJSON.error.indexOf("InternalError") > -1) {
+                    $("#globalErrors").popover({content: data.responseJSON.message, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                } else {
+                    let errors = $.parseJSON(data.responseJSON.message);
+                    let messages = "";
+
+                    $.each(errors, function (index, item) {
+                        messages = messages + " " + item.def
+                        $("#globalMessages").popover({content: item.defaultMessage, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                    });
+
+                    errors = $.parseJSON(data.responseJSON.error);
+                    $.each(errors, function (index, item) {
+                        $("#globalErrors").popover({content: item.defaultMessage, placement: "left", template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body password-doesnt-match-popover-body"></div></div>', trigger: "manual"}).popover('show');
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

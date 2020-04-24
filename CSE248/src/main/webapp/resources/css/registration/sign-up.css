@@ -1,0 +1,21 @@
+.register_card {
+    width: 350px;
+}
+
+.password-verdict {
+    color: #000;
+}
+
+.test-popover-body {
+    padding: 0.5rem 0.75rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.password-doesnt-match-popover-body {
+    padding: 0.5rem 0.75rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
