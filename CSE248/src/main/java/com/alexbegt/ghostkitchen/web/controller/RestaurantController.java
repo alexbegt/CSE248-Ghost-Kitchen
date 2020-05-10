@@ -94,20 +94,22 @@ public class RestaurantController {
     final User user = this.userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
     Cart cart = this.cartRepository.findByUser(user);
 
-    if (!cart.isCartEmpty()) {
-      List<CartItemPair> items = new ArrayList<>();
+    if(cart != null) {
+      if (!cart.isCartEmpty()) {
+        List<CartItemPair> items = new ArrayList<>();
 
-      for (CartItem cartItem : cart.getCartItems()) {
-        items.add(new CartItemPair(cartItem.getItem(), cartItem.getQuantity()));
+        for (CartItem cartItem : cart.getCartItems()) {
+          items.add(new CartItemPair(cartItem.getItem(), cartItem.getQuantity()));
+        }
+
+        model.addAttribute("items", items);
+
+        model.addAttribute("orderSubtotal", df.format(cart.getSubTotal()));
+        model.addAttribute("orderTax", df.format(cart.getTax()));
+        model.addAttribute("orderTotal", df.format(cart.getTotal()));
+
+        return "/restaurant/view-cart";
       }
-
-      model.addAttribute("items", items);
-
-      model.addAttribute("orderSubtotal", df.format(cart.getSubTotal()));
-      model.addAttribute("orderTax", df.format(cart.getTax()));
-      model.addAttribute("orderTotal", df.format(cart.getTotal()));
-
-      return "/restaurant/view-cart";
     }
 
     if (locationId.equalsIgnoreCase("1")) {

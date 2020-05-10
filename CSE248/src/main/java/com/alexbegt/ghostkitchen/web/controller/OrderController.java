@@ -69,7 +69,7 @@ public class OrderController {
 
     model.addAttribute("error", this.messageSource.getMessage("message.noOrders", null, LocaleContextHolder.getLocale()));
 
-    return "redirect:/user/home";
+    return "redirect:/home";
   }
 
   @GetMapping("/view-order-details")

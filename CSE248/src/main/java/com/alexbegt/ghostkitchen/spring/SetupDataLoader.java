@@ -109,9 +109,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     final List<CartItem> userCartItems = new ArrayList<>(Collections.singletonList(twoCheeseburgerCartItem));
 
     // == create initial restaurants
+    final List<Item> jcMenuItems = new ArrayList<>(Arrays.asList(burger, cheeseburger, steak));
     final List<Item> menuItems = new ArrayList<>(Arrays.asList(burger, cheeseburger));
-    this.createRestaurantIfNotFound("JC's Restaurant", "2 Country Club Dr", "Manorville", "NY", "11949", "631-677-8778", menuItems);
-    this.createRestaurantIfNotFound("Vinny's Restaurant #2", "125 Vinny Street", "VinnyTown", "NY", "13337", "631-677-8779", menuItems);
+    this.createRestaurantIfNotFound("JC's Restaurant", "2 Country Club Dr", "Manorville", "NY", "11949", "631-677-8778", jcMenuItems);
+    this.createRestaurantIfNotFound("McDonald's", "971 Montauk Hwy", "Shirley", "NY", "11967", "631-399-6404", menuItems);
 
     // == create initial order items
     final OrderItem burgerOrderItem = this.createOrderItemIfNotFound(burger, 1);
