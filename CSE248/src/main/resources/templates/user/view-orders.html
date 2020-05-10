@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}" id="bootstrap-css"/>
+<link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/user/view-orders.css}"/>
+<link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+<script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<head>
+    <title th:utext="#{pageTitle.viewOrders}">View Orders</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/5.13.0/css/all.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/user/view-orders.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/shared.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.0/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.js}"></script>
+</head>
+
+<body>
+    <div th:if="${param.error}">
+        <div th:if="${param.error[0]}" th:with="errorMsg=${param.error[0]}">
+            <div class="alert alert-danger text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${errorMsg}">Error</span>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${param.message}">
+        <div th:if="${param.message[0]}" th:with="message=${param.message[0]}">
+            <div class="alert alert-info text-center">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
+                <span th:text="${message}">Message</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="orders_card">
+                <label th:utext="#{message.numberOfOrders} + ' ' + ${numberOfOrders} + ' ' + #{message.orders}" class="text-center">Orders placed</label>
+                <label th:utext="#{message.lastOrderTime} + ' ' + ${lastOrderTime}" class="text-center">Last Order Time</label>
+                <label th:utext="#{message.clickOnAOrderToSeeDetails}" class="text-center">Click To see Details</label>
+
+                <div th:each="placedOrder : ${placedOrders}">
+                    <div class="d-flex justify-content-center mt-3 user_home_container" id="error1s">
+                        <a class="btn shared_btn" th:utext="#{message.selectableOrder} + ' ' + ${placedOrder.id} + ' ' + #{message.orderTotal} + ${#numbers.formatDecimal(placedOrder.total, 0, 'COMMA', 2, 'POINT')}" th:href="@{/view-order-details(orderId=${placedOrder.id})}">Change Password</a>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-flex justify-content-center links">
+                        <a th:href="@{/home}" th:utext="#{message.returnHome}">Return Home</a>
+                    </div>
+
+                    <div class="d-flex justify-content-center links">
+                        <a href="?language=en" rel="keep-params" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" rel="keep-params" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

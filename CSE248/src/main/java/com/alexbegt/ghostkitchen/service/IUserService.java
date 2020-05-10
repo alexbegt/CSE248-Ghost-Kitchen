@@ -1,6 +1,7 @@
 package com.alexbegt.ghostkitchen.service;
 
 import com.alexbegt.ghostkitchen.persistence.model.device.NewLocationToken;
+import com.alexbegt.ghostkitchen.persistence.model.menu.Item;
 import com.alexbegt.ghostkitchen.persistence.model.user.address.Address;
 import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
@@ -45,6 +46,8 @@ public interface IUserService {
   void changeUserAddress(User user, String streetAddress, String city, String state, String zipCode);
 
   void changeUserCreditCard(User user, String creditCardHolderName, String creditCardNumber, String creditCardExpirationDate, String creditCardCVV);
+
+  void addItemToCart(User user, Item item);
 
   void saveRegisteredUser(User user);
 

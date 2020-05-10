@@ -37,19 +37,29 @@ public class MvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addViewControllers(final ViewControllerRegistry registry) {
-    registry.addViewController("/").setViewName("forward:/welcome");
-
-    registry.addViewController("/welcome");
+    registry.addViewController("/").setViewName("/login/login");
 
     registry.addViewController("/login").setViewName("/login/login");
-    registry.addViewController("/logout").setViewName("/login/logout");
+    registry.addViewController("/logout").setViewName("/login/login");
     registry.addViewController("/forgot-password").setViewName("/login/forgot-password");
+    registry.addViewController("/reset-password").setViewName("/login/reset-password");
 
     registry.addViewController("/sign-up").setViewName("/registration/sign-up");
+    registry.addViewController("/two-factor-qr").setViewName("/registration/two-factor-qr");
+    registry.addViewController("/invalid-verification-token").setViewName("/registration/invalid-verification-token");
 
-    registry.addViewController("/admin-panel");
+    registry.addViewController("/home").setViewName("/user/home");
+    registry.addViewController("/change-password").setViewName("/user/change-password");
+    registry.addViewController("/change-address").setViewName("/user/change-address");
+    registry.addViewController("/change-credit-card").setViewName("/user/change-credit-card");
+    registry.addViewController("/view-orders").setViewName("/user/view-orders");
+    registry.addViewController("/view-order-details").setViewName("/user/view-order-details");
 
-    registry.addViewController("/invalid-session").setViewName("/invalid-session");
+    registry.addViewController("/view-restaurants").setViewName("/restaurant/view-restaurants");
+    registry.addViewController("/view-menu").setViewName("/restaurant/view-menu");
+    registry.addViewController("/view-cart").setViewName("/restaurant/view-cart");
+    registry.addViewController("/add-item-to-cart").setViewName("/restaurant/add-item-to-cart");
+    registry.addViewController("/remove-item-from-cart").setViewName("/restaurant/remove-item-from-cart");
   }
 
   @Override
@@ -66,7 +76,7 @@ public class MvcConfig implements WebMvcConfigurer {
   public void addInterceptors(final InterceptorRegistry registry) {
     final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
 
-    localeChangeInterceptor.setParamName("lang");
+    localeChangeInterceptor.setParamName("language");
     registry.addInterceptor(localeChangeInterceptor);
   }
 
@@ -75,6 +85,7 @@ public class MvcConfig implements WebMvcConfigurer {
     final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 
     cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+    cookieLocaleResolver.setCookieMaxAge(24 * 60 * 60);
 
     return cookieLocaleResolver;
   }

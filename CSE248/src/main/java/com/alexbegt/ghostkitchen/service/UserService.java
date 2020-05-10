@@ -1,16 +1,25 @@
 package com.alexbegt.ghostkitchen.service;
 
+import com.alexbegt.ghostkitchen.persistence.dao.cart.CartItemRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.cart.CartRepository;
 import com.alexbegt.ghostkitchen.persistence.dao.device.NewLocationTokenRepository;
 import com.alexbegt.ghostkitchen.persistence.dao.device.UserLocationRepository;
 import com.alexbegt.ghostkitchen.persistence.dao.role.RoleRepository;
-import com.alexbegt.ghostkitchen.persistence.dao.user.PasswordResetTokenRepository;
 import com.alexbegt.ghostkitchen.persistence.dao.user.UserRepository;
-import com.alexbegt.ghostkitchen.persistence.dao.user.VerificationTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.address.AddressRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.credit.CreditCardRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.token.PasswordResetTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.dao.user.token.VerificationTokenRepository;
+import com.alexbegt.ghostkitchen.persistence.model.cart.Cart;
+import com.alexbegt.ghostkitchen.persistence.model.cart.CartItem;
 import com.alexbegt.ghostkitchen.persistence.model.device.NewLocationToken;
 import com.alexbegt.ghostkitchen.persistence.model.device.UserLocation;
-import com.alexbegt.ghostkitchen.persistence.model.user.PasswordResetToken;
+import com.alexbegt.ghostkitchen.persistence.model.menu.Item;
 import com.alexbegt.ghostkitchen.persistence.model.user.User;
-import com.alexbegt.ghostkitchen.persistence.model.user.VerificationToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.address.Address;
+import com.alexbegt.ghostkitchen.persistence.model.user.credit.CreditCard;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.PasswordResetToken;
+import com.alexbegt.ghostkitchen.persistence.model.user.token.VerificationToken;
 import com.alexbegt.ghostkitchen.util.Defaults;
 import com.alexbegt.ghostkitchen.web.dto.user.UserDto;
 import com.alexbegt.ghostkitchen.web.error.UserAlreadyExistException;
@@ -42,10 +51,22 @@ public class UserService implements IUserService {
   private UserRepository userRepository;
 
   @Autowired
-  private VerificationTokenRepository tokenRepository;
+  private VerificationTokenRepository verificationTokenRepository;
 
   @Autowired
   private PasswordResetTokenRepository passwordTokenRepository;
+
+  @Autowired
+  private AddressRepository addressRepository;
+
+  @Autowired
+  private CreditCardRepository creditCardRepository;
+
+  @Autowired
+  private CartRepository cartRepository;
+
+  @Autowired
+  private CartItemRepository cartItemRepository;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -65,13 +86,6 @@ public class UserService implements IUserService {
   @Autowired
   private NewLocationTokenRepository newLocationTokenRepository;
 
-  public static final String TOKEN_INVALID = "invalidToken";
-  public static final String TOKEN_EXPIRED = "expired";
-  public static final String TOKEN_VALID = "valid";
-
-  public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
-  public static String APP_NAME = "GhostKitchen";
-
   @Override
   public User registerNewUserAccount(UserDto accountDto) throws UserAlreadyExistException {
     if (this.emailExists(accountDto.getEmail())) {
@@ -84,7 +98,7 @@ public class UserService implements IUserService {
     user.setLastName(accountDto.getLastName());
     user.setEmail(accountDto.getEmail());
     user.setPassword(this.passwordEncoder.encode(accountDto.getPassword()));
-    user.setUsingTwoFactorAuthentication(accountDto.isUsingTwoFactorAuthentication());
+    user.setUsingTwoFactorAuthentication(accountDto.getIfUsingTwoFactorAuthentication());
     user.setRoles(Collections.singletonList(this.roleRepository.findByName(Defaults.USER_ROLE)));
 
     return this.userRepository.save(user);
@@ -92,7 +106,7 @@ public class UserService implements IUserService {
 
   @Override
   public User getUser(String verificationToken) {
-    final VerificationToken token = this.tokenRepository.findByToken(verificationToken);
+    final VerificationToken token = this.verificationTokenRepository.findByToken(verificationToken);
 
     if (token != null) {
       return token.getUser();
@@ -105,15 +119,17 @@ public class UserService implements IUserService {
   public void createVerificationTokenForUser(User user, String token) {
     final VerificationToken myToken = new VerificationToken(token, user);
 
-    this.tokenRepository.save(myToken);
+    this.verificationTokenRepository.deleteAllByUser(user);
+
+    this.verificationTokenRepository.save(myToken);
   }
 
   @Override
   public VerificationToken generateNewVerificationToken(String token) {
-    VerificationToken newVerificationToken = this.tokenRepository.findByToken(token);
+    VerificationToken newVerificationToken = this.verificationTokenRepository.findByToken(token);
 
     newVerificationToken.updateToken(UUID.randomUUID().toString());
-    newVerificationToken = this.tokenRepository.save(newVerificationToken);
+    newVerificationToken = this.verificationTokenRepository.save(newVerificationToken);
 
     return newVerificationToken;
   }
@@ -121,6 +137,8 @@ public class UserService implements IUserService {
   @Override
   public void createPasswordResetTokenForUser(User user, String token) {
     final PasswordResetToken myToken = new PasswordResetToken(token, user);
+
+    this.passwordTokenRepository.deleteAllByUser(user);
 
     this.passwordTokenRepository.save(myToken);
   }
@@ -149,10 +167,10 @@ public class UserService implements IUserService {
 
   @Override
   public String validateVerificationToken(String token) {
-    final VerificationToken verificationToken = this.tokenRepository.findByToken(token);
+    final VerificationToken verificationToken = this.verificationTokenRepository.findByToken(token);
 
     if (verificationToken == null) {
-      return TOKEN_INVALID;
+      return Defaults.VERIFICATION_TOKEN_INVALID;
     }
 
     final User user = verificationToken.getUser();
@@ -160,15 +178,15 @@ public class UserService implements IUserService {
     final Calendar cal = Calendar.getInstance();
 
     if ((verificationToken.getExpirationDate().getTime() - cal.getTime().getTime()) <= 0) {
-      this.tokenRepository.delete(verificationToken);
-      return TOKEN_EXPIRED;
+      this.verificationTokenRepository.delete(verificationToken);
+      return Defaults.VERIFICATION_TOKEN_EXPIRED;
     }
 
     user.setEnabled(true);
 
     this.userRepository.save(user);
 
-    return TOKEN_VALID;
+    return Defaults.VERIFICATION_TOKEN_VALID;
   }
 
   @Override
@@ -188,7 +206,7 @@ public class UserService implements IUserService {
 
   @Override
   public NewLocationToken isNewLoginLocation(String username, String ip) {
-    if (username.equalsIgnoreCase(Defaults.ADMIN_EMAIL)) { // Don't send emails to the admin user.
+    if (username.equalsIgnoreCase(Defaults.ADMIN_EMAIL) || username.equalsIgnoreCase(Defaults.USER_EMAIL)) { // Don't send emails to the admin user.
       return null;
     }
 
@@ -196,7 +214,6 @@ public class UserService implements IUserService {
       final InetAddress ipAddress = InetAddress.getByName(ip);
       final String country = this.databaseReader.country(ipAddress).getCountry().getName();
 
-      System.out.println(country + "====****");
       final User user = this.userRepository.findByEmail(username);
       final UserLocation loc = this.userLocationRepository.findByCountryAndUser(country, user);
 
@@ -213,7 +230,7 @@ public class UserService implements IUserService {
 
   @Override
   public String generateQRUrl(User user) throws UnsupportedEncodingException {
-    return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), user.getSecret(), APP_NAME), "UTF-8");
+    return Defaults.QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", Defaults.APP_NAME, user.getEmail(), user.getSecret(), Defaults.APP_NAME), "UTF-8");
   }
 
   @Override
@@ -223,7 +240,7 @@ public class UserService implements IUserService {
     User currentUser = (User) curAuth.getPrincipal();
 
     currentUser.setUsingTwoFactorAuthentication(useTwoFactorAuthentication);
-    currentUser = userRepository.save(currentUser);
+    currentUser = this.userRepository.save(currentUser);
 
     final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
@@ -244,19 +261,95 @@ public class UserService implements IUserService {
     return this.newLocationTokenRepository.save(token);
   }
 
-  // TODO IMPLEMENT TESTS USING METHODS BELOW
+  @Override
+  public void changeUserAddress(User user, String streetAddress, String city, String state, String zipCode) {
+    Address address = this.addressRepository.findByUser(user);
+
+    if (address == null) {
+      address = new Address(streetAddress, city, state, zipCode);
+
+      address = this.addressRepository.save(address);
+    }
+    else {
+      address.setStreetAddress(streetAddress);
+      address.setCity(city);
+      address.setState(state);
+      address.setZipCode(zipCode);
+
+      address = this.addressRepository.save(address);
+    }
+
+    user.setAddress(address);
+
+    this.userRepository.save(user);
+  }
+
+  @Override
+  public void changeUserCreditCard(User user, String creditCardHolderName, String creditCardNumber, String creditCardExpirationDate, String creditCardCVV) {
+    CreditCard creditCard = this.creditCardRepository.findByUser(user);
+
+    if (creditCard == null) {
+      creditCard = new CreditCard(creditCardHolderName, creditCardNumber, creditCardExpirationDate, creditCardCVV);
+
+      creditCard = this.creditCardRepository.save(creditCard);
+    }
+    else {
+      creditCard.setCardHolderName(creditCardHolderName);
+      creditCard.setCreditCardNumber(creditCardNumber);
+      creditCard.setExpirationDate(creditCardExpirationDate);
+      creditCard.setCvv(creditCardCVV);
+
+      creditCard = this.creditCardRepository.save(creditCard);
+    }
+
+    user.setCreditCard(creditCard);
+
+    this.userRepository.save(user);
+  }
+
+  @Override
+  public void addItemToCart(User user, Item item) {
+    Cart cart = this.addToCart(user, item, 1);
+
+    cart = this.cartRepository.save(cart);
+
+    user.setCart(cart);
+
+    this.userRepository.save(user);
+  }
 
   @Override
   public void saveRegisteredUser(User user) {
     this.userRepository.save(user);
   }
 
+  private Cart addToCart(User user, Item item, int quantity) {
+    CartItem cartItem = this.cartItemRepository.findByItemAndQuantity(item, quantity);
+    Cart cart = this.cartRepository.findByUser(user);
+
+    if (cartItem == null) {
+      cartItem = new CartItem();
+
+      cartItem.setQuantity(quantity);
+
+      cartItem = this.cartItemRepository.save(cartItem);
+    }
+
+    if (!cart.isItemInCart(cartItem)) {
+      cart.addItem(cartItem);
+      return cart;
+    }
+    else {
+      return this.addToCart(user, item, quantity + 1);
+    }
+  }
+
   @Override
   public void deleteUser(User user) {
-    final VerificationToken verificationToken = this.tokenRepository.findByUser(user);
+    final VerificationToken verificationToken = this.verificationTokenRepository.findByUser(user);
 
     if (verificationToken != null) {
-      this.tokenRepository.delete(verificationToken);
+      this.verificationTokenRepository.delete(verificationToken);
     }
 
     final PasswordResetToken passwordToken = this.passwordTokenRepository.findByUser(user);
@@ -270,7 +363,7 @@ public class UserService implements IUserService {
 
   @Override
   public VerificationToken getVerificationToken(String VerificationToken) {
-    return this.tokenRepository.findByToken(VerificationToken);
+    return this.verificationTokenRepository.findByToken(VerificationToken);
   }
 
   @Override
@@ -315,5 +408,22 @@ public class UserService implements IUserService {
     catch (final Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Checks if the given verification code from the user is valid or not.
+   *
+   * @param code the code
+   * @return if the code is valid, returns true otherwise returns false
+   */
+  private boolean isValidLong(String code) {
+    try {
+      Long.parseLong(code);
+    }
+    catch (final NumberFormatException e) {
+      return false;
+    }
+
+    return true;
   }
 }

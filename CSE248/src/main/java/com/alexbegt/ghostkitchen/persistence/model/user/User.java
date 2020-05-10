@@ -1,6 +1,10 @@
 package com.alexbegt.ghostkitchen.persistence.model.user;
 
+import com.alexbegt.ghostkitchen.persistence.model.cart.Cart;
 import com.alexbegt.ghostkitchen.persistence.model.role.Role;
+import com.alexbegt.ghostkitchen.persistence.model.user.address.Address;
+import com.alexbegt.ghostkitchen.persistence.model.user.credit.CreditCard;
+import com.alexbegt.ghostkitchen.persistence.model.user.order.Orders;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import javax.persistence.Column;
@@ -12,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Collection;
 
@@ -33,11 +38,28 @@ public class User {
   @Column(length = 60)
   private String password;
 
+  @Column(columnDefinition = "boolean default false")
   public boolean isUsingTwoFactorAuthentication;
 
   private boolean enabled;
 
   private String secret;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinTable(name = "user_cart", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"))
+  private Cart cart;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinTable(name = "user_address", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id"))
+  private Address address;
+
+  @OneToOne
+  @JoinTable(name = "user_credit_card", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "credit_card_id", referencedColumnName = "id"))
+  private CreditCard creditCard;
+
+  @OneToOne
+  @JoinTable(name = "user_orders", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "orders_id", referencedColumnName = "id"))
+  private Orders orders;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -139,24 +161,6 @@ public class User {
   }
 
   /**
-   * Gets the roles the user has assigned to it.
-   *
-   * @return the collection of roles the account has.
-   */
-  public Collection<Role> getRoles() {
-    return this.roles;
-  }
-
-  /**
-   * Sets the roles assigned to a account.
-   *
-   * @param roles   the new set of roles
-   */
-  public void setRoles(final Collection<Role> roles) {
-    this.roles = roles;
-  }
-
-  /**
    * Get's if the users account is enabled or not.
    *
    * @return true if user is enabled, false if it isn't
@@ -210,6 +214,105 @@ public class User {
     this.secret = secret;
   }
 
+  /**
+   * Gets the current cart of the user
+   *
+   * @return the current cart of the user
+   */
+  public Cart getCart() {
+    return this.cart;
+  }
+
+  /**
+   * Sets the users cart
+   *
+   * @param cart the new cart
+   */
+  public void setCart(Cart cart) {
+    this.cart = cart;
+  }
+
+  /**
+   * Gets the users address
+   *
+   * @return the users address
+   */
+  public Address getAddress() {
+    return this.address;
+  }
+
+  /**
+   * Sets the users address
+   *
+   * @param address the new address
+   */
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
+  /**
+   * Gets the users credit card
+   *
+   * @return the users credit card
+   */
+  public CreditCard getCreditCard() {
+    return creditCard;
+  }
+
+  /**
+   * Sets the users credit card
+   *
+   * @param creditCard the new credit card
+   */
+  public void setCreditCard(CreditCard creditCard) {
+    this.creditCard = creditCard;
+  }
+
+  /**
+   * Gets the orders the user has placed.
+   *
+   * @return the orders
+   */
+  public Orders getOrders() {
+    return this.orders;
+  }
+
+  /**
+   * Sets the orders that the user has placed.
+   *
+   * @param orders the new orders
+   */
+  public void setOrders(Orders orders) {
+    this.orders = orders;
+  }
+
+  /**
+   * Gets the roles the user has assigned to it.
+   *
+   * @return the collection of roles the account has.
+   */
+  public Collection<Role> getRoles() {
+    return this.roles;
+  }
+
+  /**
+   * Sets the roles assigned to a account.
+   *
+   * @param roles   the new set of roles
+   */
+  public void setRoles(final Collection<Role> roles) {
+    this.roles = roles;
+  }
+
+  /**
+   * Gets the full name of the user.
+   *
+   * @return the full name of the user
+   */
+  public String getFullName() {
+    return this.getFirstName() + " " + this.getLastName();
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -249,6 +352,10 @@ public class User {
       ", isUsingTwoFactorAuthentication=" + this.isUsingTwoFactorAuthentication +
       ", secret=" + this.secret +
       ", roles=" + this.roles +
+      ", cart=" + this.cart +
+      ", address=" + this.address +
+      ", creditCard=" + this.creditCard +
+      ", orders=" + this.orders +
       "]";
   }
 }

@@ -28,7 +28,7 @@
 </head>
 <body>
     <div th:if="${param.error}">
-        <div th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION']}">
+        <div th:if="${param.error[0]}" th:with="errorMsg=${param.error[0]}">
             <div class="alert alert-danger text-center">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>
                 <span th:text="${errorMsg}">Error</span>
@@ -70,6 +70,10 @@
                         </div>
 
                         <div class="d-flex justify-content-center links mt-1">
+                            <a class="btn shared_btn" th:utext="#{button.viewCart}" th:href="@{/view-cart(locationId=-1, restaurantId=-1)}">View Cart</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center links mt-1">
                             <a class="btn shared_btn" th:utext="#{button.viewRestaurants}" th:href="@{/view-restaurants}">Restaurants</a>
                         </div>
 
@@ -95,18 +99,6 @@
                     </div>
                 </div>
 
-                <!--<div th:each="restaurant : ${restaurants}">
-                    <div class="d-flex justify-content-center mt-3 user_home_container" id="errors">
-                        <a class="btn shared_btn" th:utext="${restaurant.name}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.streetAddress}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.city}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.state}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.zipCode}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.phoneNumber}" th:href="@{/change-password}">Change Password</a>
-                        <a class="btn shared_btn" th:utext="${restaurant.items}" th:href="@{/change-password}">Change Password</a>
-                    </div>
-                </div>-->
-
                 <div class="mt-4">
                     <div class="d-flex justify-content-center links">
                         <a href="?language=en" rel="keep-params" th:utext="#{message.englishLanguage}">English</a> <a href="?language=es_ES" rel="keep-params" class="ml-2" th:utext="#{message.spanishLanguage}">Spanish</a>
@@ -116,7 +108,7 @@
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script th:inline="javascript">
         function disableTwoFactorAuthentication() {
             setTwoFactorAuthentication();
         }

@@ -85,16 +85,17 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
     http.csrf().disable()
       .authorizeRequests()
       .antMatchers("/h2/**").permitAll() // to enable access to H2 db's console
-      .antMatchers("/welcome*").permitAll()
-      .antMatchers("/login*", "/logout*", "/forgot-password*", "/reset-password*",
-        "/sign-up*", "/css/**", "/webjars/**", "/images/**").permitAll()
-      .antMatchers("/invalid-session*").anonymous()
-      .antMatchers("/update-password*").hasAuthority(Defaults.CHANGE_PASSWORD_PRIVILEGE)
+      .antMatchers("/login*", "/forgot-password*", "/reset-password*",
+        "/sign-up*", "/confirm-registration*", "/two-factor-qr*", "/invalid-verification-token*", "/new-login-location-detected*",
+        "/api/reset-password*", "/api/save-password*", "/api/register-user*", "/api/change-password*",
+        "/api/disable-two-factor-authentication*", "/api/change-address*", "/api/change-credit-card",
+        "/css/**", "/webjars/**", "/images/**", "/favicon.ico").permitAll()
+      .antMatchers("/change-password*").hasAuthority(Defaults.CHANGE_PASSWORD_PRIVILEGE)
       .anyRequest().hasAuthority(Defaults.READ_PRIVILEGE)
       .and()
       .formLogin()
       .loginPage("/login")
-      .defaultSuccessUrl("/homepage")
+      .defaultSuccessUrl("/home")
       .failureUrl("/login?error")
       .successHandler(this.myAuthenticationSuccessHandler)
       .failureHandler(this.authenticationFailureHandler)
@@ -102,14 +103,14 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
       .permitAll()
       .and()
       .sessionManagement()
-      .invalidSessionUrl("/invalid-session")
+      .invalidSessionUrl("/login?expired")
       .maximumSessions(1).sessionRegistry(this.sessionRegistry()).and()
       .sessionFixation().none()
       .and()
       .logout()
       .logoutSuccessHandler(this.myLogoutSuccessHandler)
       .invalidateHttpSession(false)
-      .logoutSuccessUrl("/logout?loggedOut")
+      .logoutSuccessUrl("/login?loggedOut")
       .deleteCookies("JSESSIONID")
       .permitAll()
       .and()
@@ -143,6 +144,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
   public RememberMeServices rememberMeServices() {
     JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
     tokenRepositoryImpl.setDataSource(dataSource);
+    tokenRepositoryImpl.setCreateTableOnStartup(true);
 
     return new GhostKitchenRememberMeServices("ghostKitchenRememberMe", this.userDetailsService, tokenRepositoryImpl);
   }
