@@ -327,6 +327,12 @@ public class UserService implements IUserService {
     CartItem cartItem = this.cartItemRepository.findByItemAndQuantity(item, quantity);
     Cart cart = this.cartRepository.findByUser(user);
 
+    if(cart == null) {
+      cart = new Cart();
+
+      cart = this.cartRepository.save(cart);
+    }
+
     if (cartItem == null) {
       cartItem = new CartItem();
 
