@@ -327,7 +327,7 @@ public class UserService implements IUserService {
     CartItem cartItem = this.cartItemRepository.findByItemAndQuantity(item, quantity);
     Cart cart = this.cartRepository.findByUser(user);
 
-    if(cart == null) {
+    if (cart == null) {
       cart = new Cart();
 
       cart = this.cartRepository.save(cart);
@@ -337,6 +337,8 @@ public class UserService implements IUserService {
       cartItem = new CartItem();
 
       cartItem.setQuantity(quantity);
+
+      cartItem.setItem(item);
 
       cartItem = this.cartItemRepository.save(cartItem);
     }

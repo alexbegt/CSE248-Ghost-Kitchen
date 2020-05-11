@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -162,6 +163,18 @@ public class Cart {
    * @param item the cart item
    */
   public void addItem(CartItem item) {
+    if(this.subTotal == null) {
+      this.subTotal = 0.00;
+    }
+
+    if(this.tax == null) {
+      this.subTotal = 0.00;
+    }
+
+    if(this.total == null) {
+      this.subTotal = 0.00;
+    }
+
     if (item != null) {
       this.cartItems.add(item);
 
@@ -176,6 +189,14 @@ public class Cart {
   }
 
   public boolean isItemInCart(CartItem cartItem) {
+    if(this.cartItems == null) {
+      this.cartItems = new ArrayList<>();
+    }
+
+    if (this.cartItems.isEmpty()) {
+      return false;
+    }
+
     for (CartItem tempCartItem : this.cartItems) {
       if (cartItem.getItem() == tempCartItem.getItem() && cartItem.getQuantity() == tempCartItem.getQuantity()) {
         return true;
