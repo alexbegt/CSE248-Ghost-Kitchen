@@ -73,8 +73,10 @@ public class DeviceService {
     DeviceMetadata existingDevice = this.findExistingDevice(user.getId(), deviceDetails, location);
 
     if (Objects.isNull(existingDevice)) {
-      if (!user.getEmail().equalsIgnoreCase(Defaults.ADMIN_EMAIL) || !user.getEmail().equalsIgnoreCase(Defaults.USER_EMAIL)) {
-        this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), LocaleContextHolder.getLocale());
+      if (!ip.equals("128.101.101.101")) {
+        if (!user.getEmail().equalsIgnoreCase(Defaults.ADMIN_EMAIL) && !user.getEmail().equalsIgnoreCase(Defaults.USER_EMAIL)) {
+          this.unknownDeviceNotification(deviceDetails, location, ip, user.getEmail(), LocaleContextHolder.getLocale());
+        }
       }
 
       DeviceMetadata deviceMetadata = new DeviceMetadata();
@@ -107,6 +109,10 @@ public class DeviceService {
     }
     else {
       clientIp = request.getRemoteAddr();
+    }
+
+    if (clientIp.equalsIgnoreCase("0:0:0:0:0:0:0:1") || clientIp.equalsIgnoreCase("127.0.0.1")) {
+      return "128.101.101.101"; // Use University of Minnesota for localhost to stop issues.
     }
 
     return clientIp;
